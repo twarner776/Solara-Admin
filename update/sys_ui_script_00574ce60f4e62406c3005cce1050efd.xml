@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.mng-acc-ct-mdl-ctrl</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .controller('ManageAccountContactModalCtrl', ManageAccountContactModalCtrl);
+
+    ManageAccountContactModalCtrl.$inject = ['$scope', '$uibModalInstance', '$q', 'AccountFactory', 'ContactFactory', 'UserFactory', 'SearchService', 'data'];
+
+    function ManageAccountContactModalCtrl($scope, $uibModalInstance, $q, AccountFactory, ContactFactory, UserFactory, SearchService, data) {
+		var ctrl = this;
+		
+		ctrl.searchAccount = searchAccount;
+		ctrl.searchInternalUser = searchInternalUser;
+		ctrl.searchEmailDuplicate = searchEmailDuplicate;
+		ctrl.getTitle = getTitle;
+		ctrl.isEmailReadOnly = isEmailReadOnly;
+		ctrl.isAccountReadonly = isAccountReadonly;
+		
+		ctrl.ok = ok;
+		ctrl.cancel = cancel;
+		
+		init();
+		
+		
+		function init() {
+			ctrl.sysId = data.sysId;
+			
+			ctrl.fields = {};
+			
+			$q.all([
+				loadClientClassifications(),
+				loadRegistrations(),
+				loadTimeZones(),
+				loadBusinessUnits(),
+				loadDataSources(),
+			]).then(function (responses) {
+				return !!ctrl.sysId ? loadContact() : responses;
+			}).then(function (response) {
+				ctrl.accountSysId = data.accountSysId || (!!ctrl.contact ? ctrl.contact.account.value : undefined);
+				
+				return !!ctrl.accountSysId ? loadAccount() : response;
+			}).then(function (response) {
+				return !!ctrl.contact && !!ctrl.contact.u_twc_point_of_contact ? loadInternalUser() : response;
+			}).then(function (response) {
+				clear();
+				!!ctrl.contact && setFormDirty();
+			});			
+		}
+		
+		function clear() {
+			var defaultFields;
+			
+			if (!!ctrl.contact) {
+				defaultFields = {
+					firstName: ctrl.contact.first_name,
+					lastName: ctrl.contact.last_name,
+					email: ctrl.contact.email,
+					mobilePhone: ctrl.contact.mobile_phone,
+					businessPhone: ctrl.contact.phone,
+					title: ctrl.contact.title,
+					clientClassification: getItemFromListByValue(ctrl.clientClassifications, ctrl.contact.u_client_class),
+					registration: getItemFromListByValue(ctrl.registrations, ctrl.contact.u_registration),
+					timeZone: getItemFromListByValue(ctrl.timeZones, ctrl.contact.time_zone),
+					internalUser: ctrl.internalUser,
+					businessUnit: getItemFromListByValue(ctrl.businessUnits, ctrl.contact.u_business_unit),
+					dataSource: getItemFromListByValue(ctrl.dataSources, ctrl.contact.u_data_source)
+				};
+			} else {
+				defaultFields = {
+					clientClassification: getItemFromListByValue(ctrl.clientClassifications, 'External'),
+					registration: getItemFromListByValue(ctrl.registrations, 'Not Registered'),
+					timeZone: getItemFromListByValue(ctrl.timeZones, 'US/Eastern'),
+					businessUnit: getItemFromListByValue(ctrl.businessUnits, 'Weather API'),
+					dataSource: getItemFromListByValue(ctrl.dataSources, 'Solara')
+				};				
+			}
+			
+			angular.extend(ctrl.fields, defaultFields);
+		}
+				
+		function ok() {
+			submit().then(
+				function (response) {
+					$uibModalInstance.close(response);
+				},
+				function (response) {
+					$uibModalInstance.dismiss(response);
+				}
+			);			
+		}
+
+		function cancel() {
+			$uibModalInstance.dismiss('cancel');
+		}
+		
+		function searchAccount(name) {
+			return SearchService.searchAccount(name).then(function (response) {
+				return response.data.result;
+			});			
+		}
+		
+		function searchEmailDuplicate(email) {
+			return SearchService.searchContactByEmailExact(email).then(function (response) {
+				var result = response.data.result;
+				
+				if (!!ctrl.contact) {
+					result = result.filter(function (value) {
+						return value.sys_id !== ctrl.contact.sys_id; 
+					});
+				}
+				
+				return result;
+			});						
+		}
+		
+		function searchInternalUser(value) {
+			return SearchService.searchInternalUserByNameOrEmail(value).then(function (response) {
+				return response.data.result;
+			});
+		}
+		
+		function loadContact() {
+			var params = {
+				sys_id: ctrl.sysId
+			};
+			
+			return ContactFactory.get(params).$promise.then(function (response) {
+				ctrl.contact = response.result;
+				
+				return response;
+			});			
+		}
+
+		function loadInternalUser() {
+			var params = {
+				sys_id: ctrl.contact.u_twc_point_of_contact.value
+			};
+			
+			return UserFactory.get(params).$promise.then(function (response) {
+				ctrl.internalUser = response.result;
+				
+				return response;
+			});			
+		}
+
+		function loadAccount() {
+			var params = {
+				sys_id: ctrl.accountSysId
+			};
+			
+			return AccountFactory.get(params).$promise.then(function (response) {
+				ctrl.fields.account = response.result;
+				
+				return response;
+			});			
+		}
+		
+		function loadClientClassifications() {
+			return ContactFactory.clientClassificationChoice().$promise.then(function (response) {
+				ctrl.clientClassifications = response.result;
+				return response;
+			});			
+		}
+
+		function loadRegistrations() {
+			return ContactFactory.registrationChoice().$promise.then(function (response) {
+				ctrl.registrations = response.result;				
+				return response;
+			});			
+		}
+		
+		function loadTimeZones() {
+			return ContactFactory.timeZoneChoice().$promise.then(function (response) {
+				ctrl.timeZones = response.result;				
+				return response;
+			});			
+		}
+				
+		function loadBusinessUnits() {
+			return ContactFactory.businessUnitChoice().$promise.then(function (response) {
+				ctrl.businessUnits = response.result;				
+				return response;
+			});			
+		}
+
+		function loadDataSources() {
+			return ContactFactory.dataSourceChoice().$promise.then(function (response) {
+				ctrl.dataSources = response.result;
+				return response;
+			});			
+		}
+		
+		function submit() {
+			var params = {
+				account: ctrl.fields.account.sys_id,
+				first_name: ctrl.fields.firstName,
+				last_name: ctrl.fields.lastName,
+				email: ctrl.fields.email,
+				mobile_phone: ctrl.fields.mobilePhone,
+				phone: ctrl.fields.businessPhone,
+				title: ctrl.fields.title,
+				u_client_class: (!!ctrl.fields.clientClassification) ? ctrl.fields.clientClassification.value : undefined,
+				u_registration: (!!ctrl.fields.registration) ? ctrl.fields.registration.value : undefined,
+				time_zone: (!!ctrl.fields.timeZone) ? ctrl.fields.timeZone.value : undefined,
+				u_twc_point_of_contact: (!!ctrl.fields.internalUser) ? ctrl.fields.internalUser.sys_id : undefined,
+				u_business_unit: (!!ctrl.fields.businessUnit) ? ctrl.fields.businessUnit.value : undefined,
+				u_data_source: (!!ctrl.fields.dataSource) ? ctrl.fields.dataSource.value : undefined
+			}; 
+	
+			var promise;
+			
+			if (!!ctrl.contact) {
+				var headParams = {
+					sys_id: ctrl.contact.sys_id
+				};
+				
+				promise = ContactFactory.update(headParams, params).$promise;
+			} else {
+				promise = ContactFactory.create(params).$promise;
+			}
+			
+			return promise.then(function (response) {
+				ctrl.sysId = response.result.sys_id;
+				return loadContact();
+			}).then(function (response) {
+				return response.result;
+			});
+		}
+
+		function getItemFromListByValue(list, value) {
+			if (!list || !list.length) {
+				return null;
+			}
+			
+			var filtredList = list.filter(function (item) {
+				return item.value === value;
+			});
+			
+			return !!filtredList.length ? filtredList[0] : null;
+		}
+		
+		function getTitle() {
+			return (!ctrl.sysId) ? 'Create Contact' : 'Edit Contact';
+		}
+
+		function isEmailReadOnly() {
+			return (!!ctrl.sysId);
+		}
+
+		function isAccountReadonly() {
+			return !!data.isAccountReadonly;
+		}
+		
+		function setFormDirty() {
+			for (var fieldName in ctrl.contactForm) {
+				if (fieldName[0] !== '$' 
+					&& ctrl.contactForm.hasOwnProperty(fieldName) 
+					&& ctrl.contactForm[fieldName] 
+					&& ctrl.contactForm[fieldName].$setDirty) {
+					ctrl.contactForm[fieldName].$setDirty();
+				}
+			}
+		}
+    }
+})();
+
+]]></script>
+        <script_name>mng-acc-ct-mdl-ctrl</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-09-26 14:58:40</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>00574ce60f4e62406c3005cce1050efd</sys_id>
+        <sys_mod_count>39</sys_mod_count>
+        <sys_name>x_wec_solara_admin.mng-acc-ct-mdl-ctrl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_00574ce60f4e62406c3005cce1050efd</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-13 16:46:07</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

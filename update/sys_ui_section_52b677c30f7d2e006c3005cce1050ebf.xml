@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_ui_section caption="" section_id="52b677c30f7d2e006c3005cce1050ebf" sys_domain="global" table="x_wec_solara_admin_api_key_package" version="3" view="">
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.begin_split</element>
+            <position>0</position>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:21:08</sys_created_on>
+            <sys_id>deb677c30f7d2e006c3005cce1050ec1</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_wec_solara_admin_api_key_package" sys_domain="global" view="Default view">52b677c30f7d2e006c3005cce1050ebf</sys_ui_section>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:21:08</sys_updated_on>
+            <sys_user/>
+            <type>.begin_split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>entitlement</element>
+            <position>1</position>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:21:08</sys_created_on>
+            <sys_id>52b677c30f7d2e006c3005cce1050ec2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_wec_solara_admin_api_key_package" sys_domain="global" view="Default view">52b677c30f7d2e006c3005cce1050ebf</sys_ui_section>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:21:08</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>solara_api_key</element>
+            <position>2</position>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:21:08</sys_created_on>
+            <sys_id>d2b677c30f7d2e006c3005cce1050ec2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_wec_solara_admin_api_key_package" sys_domain="global" view="Default view">52b677c30f7d2e006c3005cce1050ebf</sys_ui_section>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:21:08</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>solara_api_plan</element>
+            <position>3</position>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:21:08</sys_created_on>
+            <sys_id>56b677c30f7d2e006c3005cce1050ec2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_wec_solara_admin_api_key_package" sys_domain="global" view="Default view">52b677c30f7d2e006c3005cce1050ebf</sys_ui_section>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:21:08</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.split</element>
+            <position>4</position>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:21:08</sys_created_on>
+            <sys_id>d6b677c30f7d2e006c3005cce1050ec2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_wec_solara_admin_api_key_package" sys_domain="global" view="Default view">52b677c30f7d2e006c3005cce1050ebf</sys_ui_section>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:21:08</sys_updated_on>
+            <sys_user/>
+            <type>.split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>solara_api_package</element>
+            <position>5</position>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:21:08</sys_created_on>
+            <sys_id>5ab677c30f7d2e006c3005cce1050ec2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_wec_solara_admin_api_key_package" sys_domain="global" view="Default view">52b677c30f7d2e006c3005cce1050ebf</sys_ui_section>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:21:08</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>solara_api_endpoint</element>
+            <position>6</position>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:21:08</sys_created_on>
+            <sys_id>dab677c30f7d2e006c3005cce1050ec2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_wec_solara_admin_api_key_package" sys_domain="global" view="Default view">52b677c30f7d2e006c3005cce1050ebf</sys_ui_section>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:21:08</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.end_split</element>
+            <position>7</position>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:21:08</sys_created_on>
+            <sys_id>5eb677c30f7d2e006c3005cce1050ec2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_wec_solara_admin_api_key_package" sys_domain="global" view="Default view">52b677c30f7d2e006c3005cce1050ebf</sys_ui_section>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:21:08</sys_updated_on>
+            <sys_user/>
+            <type>.end_split</type>
+        </sys_ui_element>
+        <sys_ui_section action="INSERT_OR_UPDATE">
+            <caption/>
+            <header>false</header>
+            <name>x_wec_solara_admin_api_key_package</name>
+            <roles/>
+            <sys_class_name>sys_ui_section</sys_class_name>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:21:08</sys_created_on>
+            <sys_customer_update>true</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_id>52b677c30f7d2e006c3005cce1050ebf</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_wec_solara_admin_api_key_package</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+            <sys_update_name>sys_ui_section_52b677c30f7d2e006c3005cce1050ebf</sys_update_name>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:21:08</sys_updated_on>
+            <sys_user/>
+            <title>true</title>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_section>
+    </sys_ui_section>
+</record_update>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_email">
+    <sys_script_email action="INSERT_OR_UPDATE">
+        <name>entitlement_api_key_created.email</name>
+        <new_lines_to_html>false</new_lines_to_html>
+        <script><![CDATA[(function script(current, template, email, email_action, event) {
+
+	var parm2 = new global.JSON().decode(event.parm2);	
+	template.print(parm2.email);
+
+})(current, template, email, email_action, event);]]></script>
+        <sys_class_name>sys_script_email</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-05 10:57:25</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>5a67a5dd0fd6a20034457d4ce1050e6a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>entitlement_api_key_created.email</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_script_email_5a67a5dd0fd6a20034457d4ce1050e6a</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-05 10:57:25</sys_updated_on>
+    </sys_script_email>
+</record_update>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.team.focus-drctv</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .directive('focus', FocusDirective);
+
+	function FocusDirective() {
+		return {
+			restrict: 'A',
+			controller: FocusController,
+			scope: {
+				focus: '@'
+			}
+		};
+	}
+ 	
+	FocusController.$inject = ['$scope', '$element'];
+	
+	function FocusController($scope, $element) {
+		$scope.focus === 'true' && $element[0].focus();
+	}
+
+})();
+
+]]></script>
+        <script_name>team.focus-drctv</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-28 10:23:09</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>824b3fe80fb22e006c3005cce1050e97</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_wec_solara_admin.team.focus-drctv</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_824b3fe80fb22e006c3005cce1050e97</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-28 10:23:09</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

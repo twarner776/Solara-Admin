@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="API Key Package" max_length="40" name="x_wec_solara_admin_api_key_package" type="collection">
+        <element label="Entitlement" max_length="32" name="entitlement" read_only="true" reference="service_entitlement" type="reference"/>
+        <element label="Solara API Endpoint" max_length="40" name="solara_api_endpoint" type="string"/>
+        <element label="Solara API Key" max_length="40" name="solara_api_key" type="string"/>
+        <element label="Solara API Package" max_length="40" name="solara_api_package" type="string"/>
+        <element label="Solara API Plan" max_length="40" name="solara_api_plan" type="string"/>
+        <index name="index">
+            <element name="entitlement"/>
+        </index>
+    </element>
+</database>

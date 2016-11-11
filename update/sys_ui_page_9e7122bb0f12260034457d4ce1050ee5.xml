@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>true</direct>
+        <endpoint>x_wec_solara_admin_prv-ent-pln-mdl-tpl.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	
+	<form name="ctrl.planForm" class="form-horizontal modal-form" novalidate="novalidate">
+		<div class="modal-header">
+			<h3 class="modal-title">Create Plan</h3>
+		</div>
+
+		<div class="modal-body">
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label control-label-required">Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="name" name="name" required="required"
+						   ng-model="ctrl.fields.name"/>
+
+					<div ng-messages="ctrl.planForm.name.$error" ng-if="!ctrl.planForm.name.$pristine">
+						<div ng-message="required" class="error-message">required field</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="solaraPlanId" class="col-sm-3 control-label control-label-required">Plan ID</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="solaraPlanId" name="solaraPlanId" required="required"
+						   ng-model="ctrl.fields.solaraPlanId"/>
+					
+					<div ng-messages="ctrl.planForm.solaraPlanId.$error" ng-if="!ctrl.planForm.solaraPlanId.$pristine">
+						<div ng-message="required" class="error-message">required field</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="solaraId" class="col-sm-3 control-label">Solara ID</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="solaraId" name="solaraId"
+						   ng-model="ctrl.fields.solaraId"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="solaraClientId" class="col-sm-3 control-label">Solara Client ID</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="solaraClientId" name="solaraClientId"
+						   ng-model="ctrl.fields.solaraClientId"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="tpd" class="col-sm-3 control-label">Max. Calls Allowed</label>
+				<div class="col-sm-9">
+					<tpd ng-model="ctrl.fields.tpd"></tpd>					
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-sm-offset-3 col-sm-9">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" 
+								   ng-model="ctrl.fields.businessDevelopment"
+								   ng-change="ctrl.clearBizDevTeams()"/>
+							<span>Business Development plan</span>
+						</label>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group"
+				 ng-if="ctrl.isShowsBizDevTeams()">
+				<label class="col-sm-3 control-label">Teams</label>
+				<div class="col-sm-9">
+
+					<ui-select class="form-control"
+							   ng-model="ctrl.fields.bizDevTeams" 
+							   theme="bootstrap" 
+							   multiple="true" close-on-select="false">
+						<ui-select-match placeholder="Type to add a new team...">{{$item.u_team_name}}</ui-select-match>
+						<ui-select-choices repeat="bu in ctrl.bizDevTeams"
+										   refresh="ctrl.searchBizDevTeam($select.search)"
+										   refresh-delay="30">
+							<div ng-bind-html="bu.u_team_name | highlight: $select.search"></div>
+						</ui-select-choices>
+
+					</ui-select>				  
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal-footer">
+			<button class="btn btn-default btn-sm" type="button" ng-click="ctrl.cancel()">Cancel</button>
+			<button class="btn btn-primary btn-sm" type="button"
+					ng-disabled="ctrl.planForm.$invalid ||  ctrl.planForm.$pristine || ctrl.planForm.$pending"
+					ng-click="ctrl.ok()">Ok</button>
+		</div>
+	</form>
+
+</j:jelly>]]></html>
+        <name>prv-ent-pln-mdl-tpl</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-13 09:38:45</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>9e7122bb0f12260034457d4ce1050ee5</sys_id>
+        <sys_mod_count>19</sys_mod_count>
+        <sys_name>prv-ent-pln-mdl-tpl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_page_9e7122bb0f12260034457d4ce1050ee5</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-24 11:58:25</sys_updated_on>
+    </sys_ui_page>
+</record_update>

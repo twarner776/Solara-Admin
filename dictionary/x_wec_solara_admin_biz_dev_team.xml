@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Biz Dev Team" max_length="40" name="x_wec_solara_admin_biz_dev_team" type="collection">
+        <element label="Team Manager" max_length="1000" name="u_team_manager" reference="sys_user" type="glide_list"/>
+        <element label="Team Members" max_length="1000" name="u_team_members" reference="sys_user" reference_qual="active=true^company=0617b5d70f5526406c3005cce1050e26^ORcompany=f9b398070fde620034457d4ce1050e1d^ORcompany=45f190f60fa966006c3005cce1050ea0^EQ" reference_qual_condition="active=true^company=0617b5d70f5526406c3005cce1050e26^ORcompany=f9b398070fde620034457d4ce1050e1d^ORcompany=45f190f60fa966006c3005cce1050ea0^EQ" type="glide_list"/>
+        <element display="true" label="Team Name" max_length="100" name="u_team_name" type="string"/>
+    </element>
+</database>

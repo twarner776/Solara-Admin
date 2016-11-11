@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ws_operation">
+    <sys_ws_operation action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl/>
+        <http_method>GET</http_method>
+        <name>Get Package</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+	var packageId = request.queryParams.packageId;
+	
+	var restRequest = new sn_ws.RESTMessageV2('Solara Admin Console - Solara Package', 'get');
+	restRequest.setStringParameter("packageId", packageId);
+
+	var restResponse = restRequest.execute();
+
+	if (restResponse.haveError()) {
+		throw("Error calling solara API to get package ID: " + packageId + " Solara package response: " + restResponse.getBody());
+	}
+
+	return JSON.parse(restResponse.getBody());
+})(request, response);]]></operation_script>
+        <operation_uri>/api/x_wec_solara_admin/package</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/</relative_path>
+        <request_example/>
+        <requires_acl_authorization>false</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-11 11:46:50</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>a6f9ec9f0f1aa20034457d4ce1050ec7</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Get Package</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ws_operation_a6f9ec9f0f1aa20034457d4ce1050ec7</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-11 12:11:19</sys_updated_on>
+        <web_service_definition display_value="Package API">a7b96c9f0f1aa20034457d4ce1050e48</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+</record_update>

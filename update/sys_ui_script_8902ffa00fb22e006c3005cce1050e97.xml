@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.bizdev-account-auth-a</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+angular
+    .module('twc-product', [
+        'ngResource',
+        'ngAnimate',
+        'ngSanitize',
+		'ngTable',
+        'blockUI',
+        'ui.bootstrap',
+		'ui.router',
+		'toastr',
+		'ui.select'
+    ])
+
+	.config(['$stateProvider', '$urlRouterProvider',  function($stateProvider, $urlRouterProvider) {
+		
+		$urlRouterProvider.when('', '/customer-contact');
+		$stateProvider
+		
+		.state('customer-contact', {
+            url: '/customer-contact',
+			controller: 'AccountAuthenticationCustContCtrl',
+			controllerAs: 'ac',
+            templateUrl: 'x_wec_solara_admin_bizdev-account-authentication-cust-cont-tpl.do',
+			resolve:{
+				uRegistration: function (ReferenceBookFactory){
+					return ReferenceBookFactory.sysСhoice({sysparm_query: 'name=customer_contact^element=u_registration'}).$promise;
+				}
+			}
+			
+        });
+	
+		
+	}])
+
+    .provider('userService', function () {
+		var options = {};
+		this.config = function (opt) {
+			angular.extend(options, opt);
+		};
+		this.$get = [function () {
+			if (!options) {
+				throw new Error('Config options must be configured');
+			}
+			return options;
+		}];
+	})
+
+    .config(['blockUIConfig', function(blockUIConfig) {
+        blockUIConfig.delay = 400;
+		
+        blockUIConfig.requestFilter = function(config) {
+			
+			if(config.params && config.params.hasOwnProperty('preloader')){
+				return false;
+			}
+        };
+		
+    }])
+
+	.run(function ($http, $templateCache) { 
+
+		$http.defaults.headers.common['X-UserToken'] = userToken; 
+		$templateCache.put('headerCheckbox.html', '<input type="checkbox" ng-model="ac.checkboxes.checked" class="select-all" value="" />');
+	
+	});
+
+	
+	
+	$.ajaxSetup({headers: {"X-UserToken": userToken}});
+	$.get('/api/now/table/sys_user/' + userId, function (userData) {
+		angular.module('twc-product').config(['userServiceProvider', function (userServiceProvider) {
+
+			userServiceProvider.config(userData.result);
+
+		}]);
+
+		angular.element(document).ready(function() {
+			angular.bootstrap(document, ['twc-product']);
+		});
+    });
+	
+})();
+
+
+]]></script>
+        <script_name>bizdev-account-auth-app</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>anton.sychikov.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-28 09:39:48</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>8902ffa00fb22e006c3005cce1050e97</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>x_wec_solara_admin.bizdev-account-auth-a</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_8902ffa00fb22e006c3005cce1050e97</sys_update_name>
+        <sys_updated_by>anton.sychikov.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-28 10:20:50</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

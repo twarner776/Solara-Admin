@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.team.team-roles-ctrl</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+		.controller('TeamRolesCtrl', TeamRolesCtrl);
+	
+	TeamRolesCtrl.$inject = ['$scope', '$state', '$stateParams', '$q', 'BizDevTeamFactory', 'SearchService', 'toastr'];
+	
+	function TeamRolesCtrl($scope, $state, $stateParams, $q, BizDevTeamFactory, SearchService, toastr) {
+		var ctrl = this;
+		
+		ctrl.openTeamInfo = openTeamInfo;
+		ctrl.select = select;
+		ctrl.unselect = unselect;
+		ctrl.submit = submit;
+				
+		init();
+		
+		
+		function init() {
+			ctrl.sysId = $stateParams.sysId;
+			
+			loadTeam(ctrl.sysId).then(function (response) {
+				ctrl.teamManagers = convertResponseUsers(ctrl.team.u_team_manager);
+				var teamMembers = convertResponseUsers(ctrl.team.u_team_members);
+				ctrl.teamMembers = excludeManagersFromTeamMembers(teamMembers, ctrl.teamManagers);
+			});			
+		}
+				
+		function convertResponseUsers(responseUsers) {
+			var result = [];
+			
+			if (!responseUsers) {
+				return result;
+			}
+			
+			var sysIds = stringToArray(responseUsers.value);
+			var names = stringToArray(responseUsers.display_value);
+			
+			sysIds.forEach(function (value, index) {
+				result.push({
+					sys_id: sysIds[index],
+					name: names[index]
+				});
+			});
+			
+			return result;
+		}
+
+		function loadTeam(sysId) {
+			if (!sysId) {
+				return $q.resolve();
+			}
+			
+			var params = {
+				sys_id: sysId,
+				sysparm_display_value: 'all'
+			};
+			
+			return BizDevTeamFactory.get(params).$promise.then(function (response) {
+				ctrl.team = response.result;
+				
+				return response;
+			});
+		}
+		
+		function select(users) {
+			ctrl.teamManagers = ctrl.teamManagers.concat(users);
+			ctrl.teamMembers = ctrl.teamMembers.filter(function (member) {
+				return !users.some(function (value) { return member.sys_id === value.sys_id; });
+			});
+		}
+		
+		function unselect(users) {
+			ctrl.teamMembers = ctrl.teamMembers.concat(users);
+			
+			ctrl.teamManagers = ctrl.teamManagers.filter(function (manager) {
+				return !users.some(function (value) { return manager.sys_id === value.sys_id; });
+			});
+		}
+		
+		function excludeManagersFromTeamMembers(teamMembers, managers) {
+			return teamMembers.filter(function (member) {
+				return !managers.find(function (value) {
+					return member.sys_id === value.sys_id;
+				});
+			});
+		}
+				
+		function submit() {
+			var teamManagers = arrayToString(
+				ctrl.teamManagers.map(function (value) {
+					return value.sys_id;
+				})
+			);
+
+			var headParams = {
+				sys_id: ctrl.sysId
+			};
+
+			var params = {
+				u_team_manager: teamManagers
+			}; 
+	
+			return BizDevTeamFactory.update(headParams, params).$promise.then(
+				function (response) {
+					toastr.success('Team was successfully updated');					
+					return response;
+				},
+				function (response) {
+					toastr.error("Team was't successfully updated");					
+					return response;
+				});
+		}
+
+		function stringToArray(value) {
+			var result = [];
+			
+			if (!value) {
+				return result;
+			}
+			
+			result = value.split(',').map(function (value) {
+				return value.trim();
+			});
+			
+			return result;
+		}
+		
+		function arrayToString(value) {
+			return !!value ? value.join(',') : '';
+		}
+		
+		function openTeamInfo() {
+			$state.go('team-list.team-info', {sysId: ctrl.sysId});			
+		}
+	}
+	
+	
+})();
+
+]]></script>
+        <script_name>team.team-roles-ctrl</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-11-08 14:50:59</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>b2f2a9d40f8b620034457d4ce1050e9f</sys_id>
+        <sys_mod_count>19</sys_mod_count>
+        <sys_name>x_wec_solara_admin.team.team-roles-ctrl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_b2f2a9d40f8b620034457d4ce1050e9f</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-10 16:16:32</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

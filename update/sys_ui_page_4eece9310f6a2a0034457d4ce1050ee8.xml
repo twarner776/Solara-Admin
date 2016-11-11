@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>true</direct>
+        <endpoint>x_wec_solara_admin_biz-prv-entmt-tpl.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+	<form name="ctrl.provisionForm" class="form-horizontal twc-form" novalidate="true" autocomplete="off">
+
+		<h4>Provision a New Entitlement</h4> 
+
+		<div class="control-group-panel-container">
+			<div class="control-group-panel">
+				<div class="contol-group-panel-label">Package Selection</div>
+
+				<div class="row">
+					<div class="col-sm-12 col-lg-8">
+
+						<div class="form-group">
+							<label for="package" class="col-sm-2 control-label">Package</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" id="package" name="package" required="required"
+									   placeholder="Type to select package..."
+									   ng-model="ctrl.fields.package"
+									   uib-typeahead="item as item.display_name for item in ctrl.searchPackage($viewValue)"
+									   typeahead-show-hint="true"
+									   typeahead-min-length="0"
+									   typeahead-select-on-exact="true"
+									   typeahead-wait-ms="200"
+									   typeahead-editable="false"/>					
+							</div>
+						</div>
+
+					</div>
+				</div>	
+
+			</div>
+		</div>
+
+		<div class="control-group-panel-container">
+			<div class="control-group-panel">
+				<div class="contol-group-panel-label">Plan Selection</div>
+
+				<div class="row">
+					<div class="col-sm-12 col-lg-8">
+
+						<div class="form-group">
+							<label for="plan" class="col-sm-2 control-label">Plan</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" id="plan" name="plan" required="required"
+									   placeholder="Type to select plan..."
+									   ng-model="ctrl.fields.plan"
+									   uib-typeahead="item as item.name for item in ctrl.searchPlan($viewValue)"
+									   typeahead-show-hint="true" 
+									   typeahead-min-length="0"
+									   typeahead-select-on-exact="true"
+									   typeahead-wait-ms="200"
+									   typeahead-editable="false"/>					
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="control-group-panel-container">
+			<div class="control-group-panel">
+				<div class="contol-group-panel-label">Escalation Threshold Selection</div>
+
+				<div class="row">
+					<div class="col-sm-12 col-lg-8">
+
+						<div class="form-group">
+							<label for="threshold" class="col-sm-2 control-label">Threshold</label>
+							<div class="col-sm-6">
+								<div class="input-group">
+									<input type="number" min="0" max="100" step="1" ng-pattern="/^\d*$/" class="form-control" id="threshold" name="threshold"
+										   ng-model="ctrl.fields.threshold"/>					
+									<span class="input-group-addon">
+										<i class="fa fa-percent" aria-hidden="true"></i>
+									</span>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" ng-model="ctrl.fields.isSendToCustomer"/>
+										<span>Send Notification to Customer</span>
+									</label>
+								</div>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" ng-model="ctrl.fields.isSendToSales"/>
+										<span>Send Notification to Sales AM</span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="control-group-panel-container">				
+			<div class="control-group-panel">
+				<div class="contol-group-panel-label">Entitlement Definition</div>
+
+				<div class="row">
+					<div class="col-sm-12 col-lg-8">
+
+						<div class="form-group">
+							<label for="accountType" class="col-sm-2 control-label">Account Type</label>
+							<div class="col-sm-6">
+								<select class="form-control" id="accountType" name="accountType"
+										ng-model="ctrl.fields.accountType"
+										ng-options="item.text for (name, item) in ctrl.accountTypes"
+										ng-change="ctrl.clearFields(['account', 'contact'])">
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group" ng-if="ctrl.isAccountTypeOther()">
+							<label for="account" class="col-sm-2 control-label">Account</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" id="account" name="account" required="required"
+									   placeholder="Type to select account..."
+									   ng-model="ctrl.fields.account"
+									   ng-change="ctrl.clearFields(['contact'])"
+									   uib-typeahead="item as item.name for item in ctrl.searchAccount($viewValue)"
+									   typeahead-show-hint="true" 
+									   typeahead-min-length="0"
+									   typeahead-select-on-exact="true"
+									   typeahead-wait-ms="200"
+									   typeahead-editable="false"/>					
+							</div>
+							<div class="col-sm-2">								
+								<div class="provision-entitlement-panel-buttons-container">
+									<button ng-click="ctrl.createAccount()"
+											class="btn btn-sm btn-primary">Create Account</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="contact" class="col-sm-2 control-label">Contact</label>
+							<div class="col-sm-6" ng-switch="ctrl.isAccountTypeOther()">
+								<input type="text" class="form-control" id="internalContact" name="contact" required="required" 
+									   ng-switch-when="true" 
+									   ng-disabled="ctrl.isExternalContactDisables()"
+									   placeholder="Type to select contact..."
+									   ng-model="ctrl.fields.contact"
+									   uib-typeahead="item as (item.name + '  -  ' + item.email) for item in ctrl.searchExternalContact($viewValue, ctrl.fields.account)"
+									   typeahead-show-hint="true" 
+									   typeahead-min-length="0"
+									   typeahead-select-on-exact="true"
+									   typeahead-wait-ms="200"
+									   typeahead-editable="false"/>					
+
+								<input type="text" class="form-control" id="contact" name="contact" required="required" 
+									   ng-switch-when="false"
+									   placeholder="Type to select contact..."
+									   ng-model="ctrl.fields.contact"
+									   uib-typeahead="item as (item.name + '  -  ' + item.email) for item in ctrl.searchInternalContact($viewValue)"
+									   typeahead-show-hint="true" 
+									   typeahead-min-length="0"
+									   typeahead-select-on-exact="true"
+									   typeahead-wait-ms="200"
+									   typeahead-editable="false"/>														
+							</div>
+							<div class="col-sm-2">
+								<div class="provision-entitlement-panel-buttons-container">
+									<button ng-click="ctrl.createContact()"
+											ng-disabled="ctrl.isExternalContactDisables()"
+											class="btn btn-sm btn-primary">Create Contact</button>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="form-group">
+							<label for="projectName" class="col-sm-2 control-label">Project Name</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" id="projectName" name="projectName" required="required"
+									   ng-model="ctrl.fields.projectName"/>					
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-offset-2 col-sm-6 container-control-short">
+								<div class="pull-right days small">
+									<span>Set Entitlement Duration to</span>
+									<span class="nbsp"></span>
+									<span class="link" ng-click="ctrl.addToEndDateDays(30)">30</span>
+									<span>,</span>
+									<span class="nbsp"></span>
+									<span class="link" ng-click="ctrl.addToEndDateDays(60)">60</span>
+									<span class="nbsp"></span>
+									<span>or</span>
+									<span class="nbsp"></span>
+									<span class="link" ng-click="ctrl.addToEndDateDays(90)">90</span>
+									<span class="nbsp"></span>
+									<span>days</span>				
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="endDate" class="col-sm-2 control-label">End Date</label>
+
+							<div class="col-sm-6 container-control-short">										
+								<div class="input-group">
+									<input type="text" class="form-control" id="endDate" required="required"
+										   uib-datepicker-popup="yyyy-MM-dd"						 
+										   is-open="ctrl.datapickerOpened" show-button-bar="false"
+										   datepicker-options="::ctrl.datepickerOptions"
+										   ng-model-options="{timezone: 'utc'}"
+										   ng-model="ctrl.fields.endDate" 
+										   ng-click="ctrl.datapickerOpened = true" />
+									<span class="input-group-addon" ng-click="ctrl.datapickerOpened = true">
+										<i class="glyphicon glyphicon-calendar" />
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-12">
+				<button type="submit"
+						ng-disabled="ctrl.provisionForm.$invalid"
+						ng-click="ctrl.createEntitlement()"
+						class="btn btn-sm btn-primary">Create and Provision Entitlement</button>
+			</div>
+		</div>	
+	</form>
+
+</j:jelly>]]></html>
+        <name>biz-prv-entmt-tpl</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-19 10:54:10</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>4eece9310f6a2a0034457d4ce1050ee8</sys_id>
+        <sys_mod_count>5</sys_mod_count>
+        <sys_name>biz-prv-entmt-tpl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_page_4eece9310f6a2a0034457d4ce1050ee8</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-20 17:09:22</sys_updated_on>
+    </sys_ui_page>
+</record_update>

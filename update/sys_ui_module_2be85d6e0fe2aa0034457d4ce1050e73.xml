@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_ui_module">
+    <sys_ui_module action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <application display_value="Solara Admin Console">12bcd32e0fbdea006c3005cce1050e81</application>
+        <filter/>
+        <name>Biz Dev Teams</name>
+        <order/>
+        <path/>
+        <path_relative_to_root>false</path_relative_to_root>
+        <roles>x_wec_solara_admin.user</roles>
+        <sys_class_name>sys_ui_module</sys_class_name>
+        <sys_created_by>peter.crivello@weather.com</sys_created_by>
+        <sys_created_on>2016-10-21 17:21:51</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_id>2be85d6e0fe2aa0034457d4ce1050e73</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Biz Dev Teams</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_module_2be85d6e0fe2aa0034457d4ce1050e73</sys_update_name>
+        <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-21 17:21:51</sys_updated_on>
+        <table>x_wec_solara_admin_biz_dev_team</table>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+    </sys_ui_module>
+</record_update>

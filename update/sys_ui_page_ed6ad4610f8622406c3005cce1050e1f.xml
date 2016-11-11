@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>true</direct>
+        <endpoint>x_wec_solara_admin_mng-acc-ac-mdl-tpl.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	
+	<form name="ctrl.accountForm" class="form-horizontal modal-form" novalidate="novalidate">
+		<div class="modal-header">
+			<h3 class="modal-title" ng-bind="::ctrl.getTitle()"></h3>
+		</div>
+
+		
+		<div class="modal-body">
+			<div class="form-group">
+				<label for="parentAccount" class="col-sm-3 control-label"
+					   ng-class="{'control-label-required': ctrl.isChildAccount}">Parent account</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="parentAccount" name="parentAccount" ng-required="::ctrl.isChildAccount"
+						   placeholder="Type to select parent account..."
+						   ng-model="ctrl.fields.parentAccount"
+						   uib-typeahead="item as item.name for item in ctrl.searchParentAccount($viewValue)"
+						   typeahead-show-hint="true" 
+						   typeahead-min-length="0"
+						   typeahead-select-on-exact="true"
+						   typeahead-editable="false"/>					
+					
+					<div ng-messages="ctrl.accountForm.parentAccount.$error" ng-if="!ctrl.accountForm.parentAccount.$pristine">
+						<div ng-message="required" class="error-message">required field</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="accountName" class="col-sm-3 control-label control-label-required">Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="accountName" name="accountName" required="required"
+						   duplicate-validator=""
+						   search-method="ctrl.searchAccountNameDuplicate"
+						   ng-model="ctrl.fields.name"/>
+					
+					<div ng-messages="ctrl.accountForm.accountName.$error" ng-if="!ctrl.accountForm.accountName.$pristine">
+						<div ng-message="required" class="error-message">required field</div>
+						<div ng-message="duplicate" class="error-message">the account with same name already exists</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="city" class="col-sm-3 control-label">City</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="city"
+						   ng-model="ctrl.fields.city"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="country" class="col-sm-3 control-label">Country</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="country"
+						   ng-model="ctrl.fields.country"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="state" class="col-sm-3 control-label">State / Province</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="state"
+						   ng-model="ctrl.fields.state"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="phone" class="col-sm-3 control-label">Phone</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="phone" name="phone"
+						   ng-model="ctrl.fields.phone"
+						   ng-intl-tel-input=""/>
+					
+					<div ng-messages="ctrl.accountForm.phone.$error" ng-if="!ctrl.accountForm.phone.$pristine">
+						<div ng-message="ngIntlTelInput" class="error-message">invalid phone number</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="street" class="col-sm-3 control-label">Street</label>
+				<div class="col-sm-9">
+					<textarea class="form-control" rows="2" id="street"
+							  ng-model="ctrl.fields.street"></textarea>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="website" class="col-sm-3 control-label">Website</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="website"
+						   ng-model="ctrl.fields.website"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="zip" class="col-sm-3 control-label">Zip / Postal code</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="zip"
+						   ng-model="ctrl.fields.zip"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="businessUnit" class="col-sm-3 control-label">Business Unit</label>
+				<div class="col-sm-9">
+					<select class="form-control" id="businessUnit"
+							ng-model="ctrl.fields.businessUnit"
+							ng-options="item as item.label for item in ctrl.businessUnits">
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="dataSource" class="col-sm-3 control-label">Data Source</label>
+				<div class="col-sm-9">
+					<select class="form-control" id="dataSource"
+							ng-model="ctrl.fields.dataSource"
+							ng-options="item as item.label for item in ctrl.dataSources">
+					</select>
+				</div>
+			</div>
+						
+			<div class="form-group">
+				<div class="col-sm-offset-3 col-sm-9">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" ng-model="ctrl.fields.customer"/>
+							<span>Is customer</span>
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+		<div class="modal-footer">
+			<button class="btn btn-default btn-sm" type="button" ng-click="ctrl.cancel()">Cancel</button>
+			<button class="btn btn-primary btn-sm" type="button"
+					ng-disabled="ctrl.accountForm.$invalid ||  ctrl.accountForm.$pristine || ctrl.accountForm.$pending"
+					ng-click="ctrl.ok()">Ok</button>
+		</div>
+	</form>
+
+</j:jelly>]]></html>
+        <name>mng-acc-ac-mdl-tpl</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-09-23 13:44:56</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>ed6ad4610f8622406c3005cce1050e1f</sys_id>
+        <sys_mod_count>51</sys_mod_count>
+        <sys_name>mng-acc-ac-mdl-tpl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_page_ed6ad4610f8622406c3005cce1050e1f</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-21 08:56:48</sys_updated_on>
+    </sys_ui_page>
+</record_update>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.dpl-vld-drctv</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .directive('duplicateValidator', DuplicateValidatorDirective);
+
+	function DuplicateValidatorDirective() {
+		return {
+			restrict: 'A',
+			template: "<input ng-model-options=\"{ updateOn: 'default blur', debounce: { 'default': 300, 'blur': 0 } }\" >",
+			replace: true,
+			require: 'ngModel',
+			link: link,
+			scope: {
+				ngModel: '=',
+				searchMethod: '&'
+			}
+		};
+	}
+	
+	function link($scope, $element, $attrs, $modelCtrl) {
+		$modelCtrl.$asyncValidators.duplicate = function (modelValue, viewValue) {
+			return new Promise(function (resolve, reject) {
+				if (!viewValue) {
+					resolve();
+					return;
+				}
+				
+				$scope.searchMethod()(viewValue).then(
+					function (response) {						
+						if (response.length > 0) {
+							reject();
+						} else {
+							resolve();
+						}
+					},
+					function () {
+						reject();
+					}
+				);
+				
+			});
+																	   
+		};
+		
+		// dirty hack. When control creating on form, it isn't pristine. Probably for that reason: "replace: true" in directive's definition
+		$modelCtrl.$setPristine();
+	}
+
+})();
+
+]]></script>
+        <script_name>dpl-vld-drctv</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-09-27 15:17:34</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>1553f07e0f86a2406c3005cce1050ec2</sys_id>
+        <sys_mod_count>71</sys_mod_count>
+        <sys_name>x_wec_solara_admin.dpl-vld-drctv</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_1553f07e0f86a2406c3005cce1050ec2</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-09-28 12:03:37</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

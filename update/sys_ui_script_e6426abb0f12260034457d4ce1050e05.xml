@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.prv-ent-pln-mdl-ctrl</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .controller('ProvisionEntitlementPlanModalCtrl', ProvisionEntitlementPlanModalCtrl);
+
+    ProvisionEntitlementPlanModalCtrl.$inject = ['$scope', '$uibModalInstance', 'PlanFactory', 'SearchService', 'data'];
+
+    function ProvisionEntitlementPlanModalCtrl($scope, $uibModalInstance, PlanFactory, SearchService, data) {
+		var ctrl = this;
+
+		ctrl.searchBizDevTeam = searchBizDevTeam;
+		ctrl.isShowsBizDevTeams = isShowsBizDevTeams;
+		ctrl.clearBizDevTeams = clearBizDevTeams;
+		
+		ctrl.ok = ok;
+		ctrl.cancel = cancel;
+		
+		init();
+
+		function init() {
+			ctrl.fields = {
+				childs: [],
+			};			
+		}		
+		
+		function ok() {
+			submit().then(
+				function (response) {
+					$uibModalInstance.close(response);
+				},
+				function (response) {
+					$uibModalInstance.dismiss(response);
+				}
+			);			
+		}
+
+		function cancel() {
+			$uibModalInstance.dismiss('cancel');
+		}
+		
+		function searchBizDevTeam(name) {
+            return SearchService.searchBizDevTeam(name).then(function(response) {
+                ctrl.bizDevTeams = response.result;
+            });
+		}
+		
+		function clearBizDevTeams() {
+			ctrl.fields.bizDevTeams = [];
+		}
+		
+		function loadPlan(sysId) {
+			var params = {
+				sys_id: sysId
+			};
+			
+			return PlanFactory.get(params).$promise;
+		} 
+		
+		function submit() {
+			var params = {
+				name: ctrl.fields.name,
+				solara_id: ctrl.fields.solaraId,
+				solara_plan_id: ctrl.fields.solaraPlanId,
+				solara_client_id: ctrl.fields.solaraClientId,
+				tpd: ctrl.fields.tpd,
+				biz_dev_teams: ctrl.fields.bizDevTeams.map(function (value) { 
+					return value.sys_id;
+				})
+			}; 
+	
+			return PlanFactory.create(params).$promise.then(function (response) {
+				return loadPlan(response.result.sys_id);
+			}).then(function (response) {
+				return response.result;
+			});
+		}
+		
+		function isShowsBizDevTeams() {
+			return ctrl.fields.businessDevelopment;
+		}
+    }
+})();
+
+]]></script>
+        <script_name>prv-ent-pln-mdl-ctrl</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-13 09:40:40</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>e6426abb0f12260034457d4ce1050e05</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>x_wec_solara_admin.prv-ent-pln-mdl-ctrl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_e6426abb0f12260034457d4ce1050e05</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-24 12:06:19</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

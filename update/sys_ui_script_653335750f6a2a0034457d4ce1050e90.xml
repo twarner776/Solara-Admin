@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.biz.prv-ent-pkg-mdl-c</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .controller('ProvisionEntitlementPackageModalCtrl', ProvisionEntitlementPackageModalCtrl);
+
+    ProvisionEntitlementPackageModalCtrl.$inject = ['$scope', '$uibModalInstance', '$q', 'BusinessUnitFactory', 'DataSourceFactory', 'PackageFactory', 'SearchService', 'data'];
+
+    function ProvisionEntitlementPackageModalCtrl($scope, $uibModalInstance, $q, BusinessUnitFactory, DataSourceFactory, PackageFactory, SearchService, data) {
+		var ctrl = this;
+
+		ctrl.fillChildDetails = fillChildDetails;
+		ctrl.isShowsChildDetails = isShowsChildDetails;
+		ctrl.ok = ok;
+		ctrl.cancel = cancel;
+		
+		init();
+
+		
+		function init() {
+			ctrl.sysId = data.sysId;
+			
+			ctrl.fields = {};
+			
+			loadPackage(ctrl.sysId).then(function (response) {
+				ctrl.package = response.result;
+				
+				return response;
+			}).then(function (response) {			
+				return $q.all([
+					loadBusinessUnits(),
+					loadDataSources(),
+					fillChilds(ctrl.sysId)
+				]);
+			}).then(function (response) {
+				clear();
+			});
+		}		
+		
+		function clear() {
+			var defaultFields = {
+				name: ctrl.package.name.display_value,
+				solaraPackageId: ctrl.package.u_solara_package_id.display_value,
+				shortDescription: ctrl.package.short_description.display_value,
+				businessUnit: (!!ctrl.package.u_business_unit) ? getItemFromListBySysId(ctrl.businessUnits, ctrl.package.u_business_unit.value) : undefined,
+				dataSource: (!!ctrl.package.u_data_source) ? getItemFromListBySysId(ctrl.dataSources, ctrl.package.u_data_source.value) : undefined,
+				childs: ctrl.childs
+			};
+			
+			angular.extend(ctrl.fields, defaultFields);
+		}
+		
+		function ok() {
+			submit().then(
+				function (response) {
+					$uibModalInstance.close(response);
+				},
+				function (response) {
+					$uibModalInstance.dismiss(response);
+				}
+			);			
+		}
+
+		function cancel() {
+			$uibModalInstance.dismiss('cancel');
+		}
+								
+		function fillChilds(packageSysId) {
+			return loadPackageChilds(packageSysId).then(function (response) {
+				ctrl.childs = response.result.map(function (value) {
+					return {
+						sys_id: value.suite_child.value,
+						name: value.suite_child.display_value
+					};
+				});				
+			});
+		}
+		
+		function fillChildDetails(childs) {
+			if (!childs || childs.length !== 1) {
+				ctrl.childDetails = undefined;
+				return;
+			}
+			
+			loadPackage(childs[0].sys_id).then(function (response) {
+				var childPackage = response.result;
+				var shortDescription = childPackage.short_description.display_value,
+					apiSpec = childPackage.u_api_specification.display_value,
+					supportedBy = childPackage.u_fulfillment_group.display_value;
+				
+				ctrl.childDetails = {
+					shortDescription: {
+						value: shortDescription,
+						isShows: !!shortDescription
+					},
+					apiSpec: {
+						value: apiSpec,
+						isShows: /^http[s]?:\/\//.test(apiSpec)
+					},
+					supportedBy: {
+						value: supportedBy,
+						isShows: !!supportedBy
+					}
+				};
+			});			
+		}
+		
+		function loadPackageChilds(packageSysId) {
+			var params = {
+				suite_parent: packageSysId,
+				sysparm_display_value: 'all'
+			};
+			
+			return PackageFactory.childList(params).$promise;						
+		}
+		
+		function loadBusinessUnits() {
+			return BusinessUnitFactory.list().$promise.then(function (response) {
+				ctrl.businessUnits = response.result.map(function (value) {
+					return {
+						sys_id: value.sys_id,
+						name: value.name
+					};
+				});				
+				return response;
+			});			
+		}
+
+		function loadDataSources() {
+			return DataSourceFactory.list().$promise.then(function (response) {
+				ctrl.dataSources = response.result.map(function (value) {
+					return {
+						sys_id: value.sys_id,
+						name: value.u_name
+					};
+				});
+				return response;
+			});			
+		}
+		
+		function loadPackage(sysId) {
+			var params = {
+				sys_id: sysId,
+				sysparm_display_value: 'all'
+			};
+			
+			return PackageFactory.get(params).$promise;
+		} 
+		
+		function submit() {
+			return $q.resolve();
+		}
+		
+		function isShowsChildDetails() {
+			if (!ctrl.childDetails) {
+				return false;
+			}
+			
+			return Object.keys(ctrl.childDetails).filter(function (key) {
+				return ctrl.childDetails.hasOwnProperty(key) && ctrl.childDetails[key].isShows;
+			}).length > 0;
+		}
+		
+		function getItemFromListBySysId(list, value) {
+			if (!list || !list.length) {
+				return null;
+			}
+			
+			var filtredList = list.filter(function (item) {
+				return item.sys_id === value;
+			});
+			
+			return !!filtredList.length ? filtredList[0] : null;
+		}
+
+
+    }
+})();
+
+]]></script>
+        <script_name>biz.prv-ent-pkg-mdl-ctrl</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-19 11:21:27</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>653335750f6a2a0034457d4ce1050e90</sys_id>
+        <sys_mod_count>25</sys_mod_count>
+        <sys_name>x_wec_solara_admin.biz.prv-ent-pkg-mdl-c</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_653335750f6a2a0034457d4ce1050e90</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-26 09:45:17</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

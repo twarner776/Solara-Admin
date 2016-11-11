@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_db_view_table">
+    <sys_db_view_table action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <left_join>true</left_join>
+        <order>101</order>
+        <sys_class_name>sys_db_view_table</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-09-27 11:28:01</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>02b128fe0f46a2406c3005cce1050e83</sys_id>
+        <sys_mod_count>6</sys_mod_count>
+        <sys_name>service_entitlement</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_db_view_table_02b128fe0f46a2406c3005cce1050e83</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-09-27 11:55:32</sys_updated_on>
+        <table>service_entitlement</table>
+        <variable_prefix>s</variable_prefix>
+        <view display_value="x_wec_solara_admin_contact_entitlement">f65124fe0f46a2406c3005cce1050e81</view>
+        <where_clause/>
+    </sys_db_view_table>
+</record_update>

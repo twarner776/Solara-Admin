@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ws_operation">
+    <sys_ws_operation action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl/>
+        <http_method>POST</http_method>
+        <name>Create Package</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+	var params = {
+		name: request.body.data.name,
+		solaraPackageId: request.body.data.solara_package_id,
+		shortDescription: request.body.data.short_description,
+		businessUnitSysId: request.body.data.u_business_unit,
+		dataSourceSysId: request.body.data.u_data_source,
+		bizDevTeams: request.body.data.biz_dev_teams,
+		childs: request.body.data.childs
+	};
+	
+	var record = new GlideRecord('cmdb_software_product_model');
+	record.initialize();
+	
+	record.short_description = params.shortDescription;
+	record.u_application_type = 'Package';
+	record.u_solara_package_id = params.solaraPackageId;
+	record.u_have_portal = 'Yes';
+	record.u_fulfillment_group = getUserGroupSysId('API Support');
+	record.u_business_unit = params.businessUnitSysId;
+	record.u_data_source = params.dataSourceSysId;
+	record.u_configuration_item = getProductSysId('Weather API');
+	record.name = params.name;
+	record.u_boolean_1 = true;
+	record.u_portal_name = getPortalSysId('API Customer Portal');
+	record.u_team_name = (!!params.bizDevTeams) ? params.bizDevTeams.join(',') : params.bizDevTeams;
+	
+	// sys_user - Todd Gladfelter, the sys_id should be same on different environments (dev, prod)
+	record.owner = 'ef235c460fd721006aa57d4ce1050ead';	
+	
+	record.insert();
+
+	
+	//var platformSysId = getSoftwareProductModelSysId('The Weather Company Solara');
+	//linkSoftwareProductModels(platformSysId, record.sys_id);
+	
+	
+	if (!!params.childs) {
+		params.childs.forEach(function (childSysId) {
+			linkSoftwareProductModels(record.sys_id, childSysId);
+		});
+	}
+	
+	return {
+		sys_id: record.getValue('sys_id')
+	};
+	
+	
+	function getUserGroupSysId(name) {
+		return getSysIdByName('sys_user_group', 'name', name);
+	}
+
+	function getProductSysId(name) {
+		return getSysIdByName('x_wec_product_table', 'name', name);
+	}
+	
+	function getPortalSysId(name) {
+		return getSysIdByName('sp_portal', 'title', name);
+	}
+	
+	function getSoftwareProductModelSysId(name) {
+		return getSysIdByName('cmdb_software_product_model', 'display_name', name);
+	}
+	
+	function getSysIdByName(table, nameColumn, name) {
+		var record = new GlideRecord(table);
+		record.addQuery(nameColumn, name);
+		record.query();
+		
+		if (!record.hasNext()) {
+			throw new Error('Can not find an entry in table ' + table + ' by name: ' + name);
+		}
+		
+		record.next();
+		
+		return record.sys_id;
+	}
+
+	
+	function linkSoftwareProductModels(parentSysId, childSysId) {
+		var record = new GlideRecord('cmdb_m2m_suite_model');
+		record.initialize();
+		
+		record.suite_parent = parentSysId;
+		record.suite_child = childSysId;
+		
+		record.insert();
+	}
+	
+	
+/*
+	var params = {
+		name: request.body.data.name
+	};
+
+	var restRequest = new sn_ws.RESTMessageV2('Solara Admin Console - Solara Package', 'post');
+	restRequest.setRequestBody(JSON.stringify(params));
+
+	var restResponse = restRequest.execute();
+
+	if (restResponse.haveError()) {
+		throw("Error found: " + restResponse.getErrorMessage() + " calling solara API to create a package with name: " + params.name + '. ' + restResponse.getBody());
+	}
+
+	return JSON.parse(restResponse.getBody());
+*/
+})(request, response);]]></operation_script>
+        <operation_uri>/api/x_wec_solara_admin/package</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/</relative_path>
+        <request_example/>
+        <requires_acl_authorization>false</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-11 11:54:28</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>290e24530f5aa20034457d4ce1050e6b</sys_id>
+        <sys_mod_count>21</sys_mod_count>
+        <sys_name>Create Package</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ws_operation_290e24530f5aa20034457d4ce1050e6b</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-27 14:09:04</sys_updated_on>
+        <web_service_definition display_value="Package API">a7b96c9f0f1aa20034457d4ce1050e48</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+</record_update>

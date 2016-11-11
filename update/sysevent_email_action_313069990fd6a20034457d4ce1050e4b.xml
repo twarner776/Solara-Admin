@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sysevent_email_action">
+    <sysevent_email_action action="INSERT_OR_UPDATE">
+        <action_insert>false</action_insert>
+        <action_update>false</action_update>
+        <active>true</active>
+        <advanced_condition/>
+        <affected_field_on_event/>
+        <collection/>
+        <condition/>
+        <content_type>text/html</content_type>
+        <description>Notification invokes by 'x_wec_solara_admin.key.created' event from Scripted REST: 'Entitlement API' method 'Create entitlement'.&#13;
+Event contains next parameters:&#13;
+ - First parameter - recipient email&#13;
+ - Second parameter - Data object encoded to json &#13;
+Encoded data object is used in email message through notification email scripts.</description>
+        <event_name>x_wec_solara_admin.key.created</event_name>
+        <event_parm_1>true</event_parm_1>
+        <event_parm_2>false</event_parm_2>
+        <exclude_delegates>false</exclude_delegates>
+        <force_delivery>false</force_delivery>
+        <from/>
+        <generation_type>event</generation_type>
+        <importance/>
+        <include_attachments>false</include_attachments>
+        <item>event.parm1</item>
+        <item_table/>
+        <mandatory>false</mandatory>
+        <message/>
+        <message_html><![CDATA[<p>Thanks, your account is now activated!<br />Your API key is now provisioned and ready to use.</p>
+<p><strong>Your Account Name is: ${mail_script:entitlement_api_key_created.company_name}</strong><br /><strong>Your User ID is: ${mail_script:entitlement_api_key_created.email}</strong><br /><strong>Your API key is: ${mail_script:entitlement_api_key_created.api_key}</strong></p>
+<p>&nbsp;</p>
+<p>Please click on ${mail_script:customer_api_key_created.registration_terms_doc_link} to review terms and conditions of usage.</p>
+<p><br />Please do not reply to this email as the mailbox is not monitored. If you have questions or concerns then please send an email to apisupport@weather.com</p>
+<p>Regards,</p>
+<p>The TWC API Team</p>]]></message_html>
+        <message_list/>
+        <message_text/>
+        <name>Entitlement API Key Created Email</name>
+        <omit_watermark>false</omit_watermark>
+        <order>100</order>
+        <push_message_only>false</push_message_only>
+        <recipient_fields/>
+        <recipient_groups/>
+        <recipient_users/>
+        <reply_to/>
+        <send_self>true</send_self>
+        <sms_alternate/>
+        <style/>
+        <subject>Thank you for registering for an API Key - API Key Provisioned</subject>
+        <subscribable>false</subscribable>
+        <sys_class_name>sysevent_email_action</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-05 10:27:22</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_id>313069990fd6a20034457d4ce1050e4b</sys_id>
+        <sys_mod_count>13</sys_mod_count>
+        <sys_name>Entitlement API Key Created Email</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sysevent_email_action_313069990fd6a20034457d4ce1050e4b</sys_update_name>
+        <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-07 11:36:16</sys_updated_on>
+        <sys_version>2</sys_version>
+        <template/>
+        <type>email</type>
+        <weight>0</weight>
+    </sysevent_email_action>
+</record_update>

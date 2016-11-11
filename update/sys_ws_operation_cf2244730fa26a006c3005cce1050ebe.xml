@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ws_operation">
+    <sys_ws_operation action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl/>
+        <http_method>POST</http_method>
+        <name>Create Account is owned by current user</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+	var params = request.body.data;
+
+	var accountRecord = insertAccountEntry(params);
+
+	var accountSysId = accountRecord.getValue('sys_id');
+	var userSysId = gs.getUserID();
+
+	insertTeamMemberEntry(accountSysId, userSysId);
+	
+	return {
+		sys_id: accountSysId
+	};
+	
+	
+	function insertAccountEntry(requestParams) {
+		var record = new GlideRecord('customer_account');
+		record.initialize();
+
+		for (var name in params) {
+			if (!params.hasOwnProperty(name) || !record.isValidField(name)) {
+				continue;
+			}
+
+			record.setValue(name, params[name]);
+		}
+
+		record.insert();
+		
+		return record;
+	}
+	
+	function insertTeamMemberEntry(accountSysId, userSysId) {
+		var record = new GlideRecord('sn_customerservice_team_member');
+		record.initialize();
+
+		record.user = userSysId;
+		record.account = accountSysId;
+
+		record.insert();		
+		
+		return record;
+	}
+	
+})(request, response);]]></operation_script>
+        <operation_uri>/api/x_wec_solara_admin/bizdev/account</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/account</relative_path>
+        <request_example/>
+        <requires_acl_authorization>false</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-25 08:15:42</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>cf2244730fa26a006c3005cce1050ebe</sys_id>
+        <sys_mod_count>4</sys_mod_count>
+        <sys_name>Create Account is owned by current user</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ws_operation_cf2244730fa26a006c3005cce1050ebe</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-25 08:38:59</sys_updated_on>
+        <web_service_definition display_value="Biz Dev API">2e4f2fd30f622e0034457d4ce1050e37</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+</record_update>

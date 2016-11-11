@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_ui_list parent="" relationship="" sys_domain="global" table="x_wec_solara_admin_contact_entitlement" version="2" view="">
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>c_account</element>
+            <list_id display_value="x_wec_solara_admin_contact_entitlement" element="NULL" name="x_wec_solara_admin_contact_entitlement" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">99f560b20f86a2406c3005cce1050e8d</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>0</position>
+            <sum>false</sum>
+            <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+            <sys_created_on>2016-09-27 11:46:14</sys_created_on>
+            <sys_id>9df560b20f86a2406c3005cce1050e8d</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-27 11:46:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>c_accumulated_roles</element>
+            <list_id display_value="x_wec_solara_admin_contact_entitlement" element="NULL" name="x_wec_solara_admin_contact_entitlement" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">99f560b20f86a2406c3005cce1050e8d</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>1</position>
+            <sum>false</sum>
+            <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+            <sys_created_on>2016-09-27 11:46:14</sys_created_on>
+            <sys_id>11f560b20f86a2406c3005cce1050e8e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-27 11:46:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>c_active</element>
+            <list_id display_value="x_wec_solara_admin_contact_entitlement" element="NULL" name="x_wec_solara_admin_contact_entitlement" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">99f560b20f86a2406c3005cce1050e8d</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>2</position>
+            <sum>false</sum>
+            <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+            <sys_created_on>2016-09-27 11:46:14</sys_created_on>
+            <sys_id>91f560b20f86a2406c3005cce1050e8e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-27 11:46:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>c_average_daily_fte</element>
+            <list_id display_value="x_wec_solara_admin_contact_entitlement" element="NULL" name="x_wec_solara_admin_contact_entitlement" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">99f560b20f86a2406c3005cce1050e8d</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>3</position>
+            <sum>false</sum>
+            <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+            <sys_created_on>2016-09-27 11:46:14</sys_created_on>
+            <sys_id>15f560b20f86a2406c3005cce1050e8e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-27 11:46:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>c_building</element>
+            <list_id display_value="x_wec_solara_admin_contact_entitlement" element="NULL" name="x_wec_solara_admin_contact_entitlement" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">99f560b20f86a2406c3005cce1050e8d</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>4</position>
+            <sum>false</sum>
+            <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+            <sys_created_on>2016-09-27 11:46:14</sys_created_on>
+            <sys_id>95f560b20f86a2406c3005cce1050e8e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-27 11:46:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>c_calendar_integration</element>
+            <list_id display_value="x_wec_solara_admin_contact_entitlement" element="NULL" name="x_wec_solara_admin_contact_entitlement" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">99f560b20f86a2406c3005cce1050e8d</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>5</position>
+            <sum>false</sum>
+            <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+            <sys_created_on>2016-09-27 11:46:14</sys_created_on>
+            <sys_id>19f560b20f86a2406c3005cce1050e8e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-27 11:46:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>c_city</element>
+            <list_id display_value="x_wec_solara_admin_contact_entitlement" element="NULL" name="x_wec_solara_admin_contact_entitlement" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">99f560b20f86a2406c3005cce1050e8d</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>6</position>
+            <sum>false</sum>
+            <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+            <sys_created_on>2016-09-27 11:46:14</sys_created_on>
+            <sys_id>99f560b20f86a2406c3005cce1050e8e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-27 11:46:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>c_company</element>
+            <list_id display_value="x_wec_solara_admin_contact_entitlement" element="NULL" name="x_wec_solara_admin_contact_entitlement" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">99f560b20f86a2406c3005cce1050e8d</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>7</position>
+            <sum>false</sum>
+            <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+            <sys_created_on>2016-09-27 11:46:14</sys_created_on>
+            <sys_id>1df560b20f86a2406c3005cce1050e8e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-27 11:46:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>c_cost_center</element>
+            <list_id display_value="x_wec_solara_admin_contact_entitlement" element="NULL" name="x_wec_solara_admin_contact_entitlement" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">99f560b20f86a2406c3005cce1050e8d</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>8</position>
+            <sum>false</sum>
+            <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+            <sys_created_on>2016-09-27 11:46:14</sys_created_on>
+            <sys_id>9df560b20f86a2406c3005cce1050e8e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-27 11:46:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>c_country</element>
+            <list_id display_value="x_wec_solara_admin_contact_entitlement" element="NULL" name="x_wec_solara_admin_contact_entitlement" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">99f560b20f86a2406c3005cce1050e8d</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>9</position>
+            <sum>false</sum>
+            <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+            <sys_created_on>2016-09-27 11:46:14</sys_created_on>
+            <sys_id>11f560b20f86a2406c3005cce1050e8f</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-27 11:46:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element/>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <name>x_wec_solara_admin_contact_entitlement</name>
+            <parent/>
+            <position/>
+            <relationship/>
+            <sum>false</sum>
+            <sys_class_name>sys_ui_list</sys_class_name>
+            <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+            <sys_created_on>2016-09-27 11:46:14</sys_created_on>
+            <sys_customer_update>true</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_id>99f560b20f86a2406c3005cce1050e8d</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_wec_solara_admin_contact_entitlement</sys_name>
+            <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+            <sys_update_name>sys_ui_list_x_wec_solara_admin_contact_entitlement_null</sys_update_name>
+            <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-27 11:46:14</sys_updated_on>
+            <sys_user/>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_list>
+    </sys_ui_list>
+</record_update>

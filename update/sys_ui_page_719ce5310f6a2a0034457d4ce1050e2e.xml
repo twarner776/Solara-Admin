@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>true</direct>
+        <endpoint>x_wec_solara_admin_biz-manage-entitlement-app.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+<g:evaluate object="true">
+	var session = gs.getSession();
+	var token = session.getSessionToken();
+</g:evaluate>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="TWCICON.png" />
+	<script>
+		var userId = '${gs.getUserID()}';
+		var userToken = "$[token]";
+		var instanceUrl = '${gs.getProperty('glide.servlet.uri')}';
+		var instanceName = '${gs.getProperty('instance_name')}';
+	</script>
+	  	
+	  
+    <title>My Customer Accounts</title>
+	  
+	<style>
+		.modal-form {
+			min-height: 500px;
+		}
+		
+		.modal-form .form-group {
+			margin-bottom: 20px;
+		}
+		
+		.package-modal-window .modal-dialog  {
+			width: 630px;
+		}
+
+		.plan-modal-window .modal-dialog  {
+			width: 630px;
+		}
+
+		
+		.large-fa-text.fa {
+			font-size: 16px;
+		}
+
+		.dropdown.dropdown-action .dropdown-menu li.item a:hover {
+			background-color: #f5f5f5;
+		}
+		
+		.uib-datepicker .btn {
+			border: 0;
+		}
+		
+		.split-button-group {
+			margin-left: 5px;
+		}
+		
+		.split-button-group:first-child {
+			margin-left: initial;
+		}
+		
+		.filter-block {
+			display: flex;
+		}
+		
+		.filter-block-panel {
+			flex: 1;
+			min-width: 470px;
+		}
+				
+		.filter-block-create-or-block {
+			flex: 0 0 75px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		
+		.filter-block-create-button-block {
+			flex: 1;
+			display: flex;
+			align-items: center;
+		}
+		
+		.control-group-panel-container {
+			width: 100%;
+			margin-bottom: 7px;
+		}
+		
+		.control-group-panel {
+		    padding: 14px 14px 9px 14px;
+			background-color: #f9f9fb;
+			border: 1px solid #e1e1e8;
+			border-radius: 4px;
+			width: 100%;
+		}
+		
+		.contol-group-panel-label {
+			color: #808080;
+			font-size: 16px;
+			font-weight: bold;
+		    border-width: 0;
+			border-bottom: 1px solid transparent;
+			border-image: linear-gradient(to right, rgba(221, 221, 221, 1) 0%, rgba(221, 221, 221, 0) 70%);
+			border-image-slice: 1;
+			margin-top: -5px;
+			margin-bottom: 12px;
+			margin-left: -14px;
+			padding-left: 14px;
+			padding-bottom: 3px;
+		}
+		
+		input.ng-invalid:not(.ng-pristine):not(:focus), select.ng-invalid:not(.ng-pristine):not(:focus) {
+			border: 1px solid red;
+		}
+		
+		.error-message {
+			color: red;
+			position: absolute;
+		}
+		
+		.control-label-required:after {
+			content: "\f069";
+			margin-left: 2px;
+			font: normal normal normal 9px/1 FontAwesome;
+			text-align: center;
+			vertical-align: top;
+			position: fixed;
+			/* color: #e44; */
+		}
+		
+		.ui-select-multiple.ui-select-bootstrap.form-control {
+			min-height: 34px;
+		}
+		
+		.container-control-short[class^="col-"] {
+			width: 290px;
+		}
+		
+		.days {
+			color: #808080;
+		}
+		
+		.nbsp:after {
+			content: "\00a0";
+		}
+
+		.link, .link:focus, .link:hover, .link:active {
+			color: #337ab7;
+			text-decoration: underline;
+			cursor: pointer;
+		}
+		
+		.provision-entitlement-panel-buttons-container .btn {
+			width: 110px;
+		}
+
+		.provision-entitlement-panel-buttons-container .btn:not(:last-child) {
+			margin-right: 15px;
+		}
+		
+		.package-child {
+			display: flex;
+			padding-left: 15px;
+			padding-right: 15px;
+			height: 170px;
+		}
+		
+		.package-child-list-container {
+			flex: 1;
+			display: flex;
+		}
+		
+		.package-child-btn-container {
+			margin-left: 5px;
+			margin-right: 5px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+		
+		.package-child-btn {
+			margin: 1px;
+		}
+		
+		.extendable-package-container {
+			margin-bottom: 5px;
+		}
+		
+		.extendable-package-container .search-control-label.control-label {
+			padding: 0;
+		}
+		
+		.child-details-container {
+		    margin-top: 10px;
+			padding: 5px;
+			background-color: #eee;
+			border-radius: 4px;
+			border: 1px solid #ccc;
+			font-size: 85%;
+		}
+		
+		.child-details-label {
+			display: inline-block;
+			width: 130px;
+			font-weight: bold;
+		}
+		
+		.tpd-control * {
+			margin-right: 10px;
+		}
+		
+		.tpd-control input.form-control, .tpd-control select.form-control {
+			display: inline-block;
+			width: 100px;
+		}
+	  </style>
+
+
+  </head>
+
+  <body style="padding-top: 5px;" ng-controller="AppCtrl">
+	  <div id="wrapper" style="padding-right: 0px;">
+
+		<!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+
+				<uib-tabset active="activeIndex">
+					<uib-tab index="1" select="changeState(1)" heading="My Customer Accounts">
+						<div ui-view=""></div>
+					</uib-tab>
+					<uib-tab index="2" select="changeState(2)" heading="Create Customer Account">
+						<div ui-view=""></div>
+					</uib-tab>
+					<uib-tab index="3" select="changeState(3)" heading="Provision Entitlement">
+						<div ui-view=""></div>
+					</uib-tab>
+				</uib-tabset>
+				
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->	  
+		
+	  
+	<script language="javascript" src="x_wec_solara_admin.biz.init.jsdbx" />  
+  </body>
+</html>
+
+	
+	
+</j:jelly>]]></html>
+        <name>biz-manage-entitlement-app</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-19 10:53:14</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>719ce5310f6a2a0034457d4ce1050e2e</sys_id>
+        <sys_mod_count>8</sys_mod_count>
+        <sys_name>biz-manage-entitlement-app</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_page_719ce5310f6a2a0034457d4ce1050e2e</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-28 12:59:27</sys_updated_on>
+    </sys_ui_page>
+</record_update>

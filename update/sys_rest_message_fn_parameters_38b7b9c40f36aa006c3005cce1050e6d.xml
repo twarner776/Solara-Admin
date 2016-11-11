@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_rest_message_fn_parameters">
+    <sys_rest_message_fn_parameters action="INSERT_OR_UPDATE">
+        <name>{clientId}</name>
+        <rest_message_function display_value="get">7fd4b1040f36aa006c3005cce1050ed6</rest_message_function>
+        <sys_class_name>sys_rest_message_fn_parameters</sys_class_name>
+        <sys_created_by>peter.crivello@weather.com</sys_created_by>
+        <sys_created_on>2016-10-26 11:28:14</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>38b7b9c40f36aa006c3005cce1050e6d</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>{clientId}</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_rest_message_fn_parameters_38b7b9c40f36aa006c3005cce1050e6d</sys_update_name>
+        <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-26 11:44:34</sys_updated_on>
+        <type>string</type>
+        <value>8dbc0641-5079-41c9-bc7f-fee85f0f2d2e</value>
+    </sys_rest_message_fn_parameters>
+</record_update>

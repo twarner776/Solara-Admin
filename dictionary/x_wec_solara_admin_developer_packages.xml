@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Developer Packages" max_length="40" name="x_wec_solara_admin_developer_packages" type="collection">
+        <element label="Account Type" max_length="100" name="u_account_type" type="string"/>
+        <element label="Knowledge Article" max_length="200" name="u_kb_article" type="string"/>
+        <element label="Solara Package ID" max_length="90" name="u_solara_package_id" reference="cmdb_software_product_model" reference_qual="u_application_type=Package^EQ" reference_qual_condition="u_application_type=Package^EQ" type="reference"/>
+    </element>
+</database>

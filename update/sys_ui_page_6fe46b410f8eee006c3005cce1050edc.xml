@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>true</direct>
+        <endpoint>x_wec_solara_admin_mng-acc-chld-tpl.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+	<form class="form-horizontal twc-form" novalidate="true" autocomplete="off">
+
+		<div class="row">
+			<div class="col-sm-12">				
+				
+				<div class="filter-block">
+					<div class="filter-block-panel">
+
+						<div class="control-group-panel-container ">
+							<div class="control-group-panel">
+								<div class="contol-group-panel-label">Search for existing accounts to edit accounts</div>				
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label">Parent Account</label>
+									<div class="col-sm-9">
+
+										<ui-select class="form-control"
+												   ng-model="ctrl.filter.parentAccounts"
+												   theme="bootstrap"
+												   multiple="true" close-on-select="false">
+											<ui-select-match placeholder="Type to add a new parent accounts...">{{$item.name}}</ui-select-match>
+											<ui-select-choices repeat="bu in ctrl.parentAccounts"
+															   refresh="ctrl.searchParentAccount($select.search)"
+															   refresh-delay="30">
+												<div ng-bind-html="bu.name | highlight: $select.search"></div>
+											</ui-select-choices>
+
+										</ui-select>				  
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label">Business Unit</label>
+									<div class="col-sm-9">
+
+										<ui-select class="form-control"
+												   ng-model="ctrl.filter.businessUnits" 
+												   theme="bootstrap" 
+												   multiple="true" close-on-select="false">
+											<ui-select-match placeholder="Type to add a new business units...">{{$item.label}}</ui-select-match>
+											<ui-select-choices repeat="bu in ctrl.businessUnits"
+															   refresh="ctrl.searchBusinessUnit($select.search)"
+															   refresh-delay="30">
+												<div ng-bind-html="bu.label | highlight: $select.search"></div>
+											</ui-select-choices>
+
+										</ui-select>				  
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label">Name</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" ng-model="ctrl.filter.name" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-sm-offset-3 col-sm-9">
+										<div class="btn-group split-button-group">
+											<button type="submit" 
+													ng-click="ctrl.search()"
+													class="btn btn-sm btn-primary">Search</button>
+										</div>
+
+										<div class="btn-group split-button-group">
+											<button type="button" 
+													class="btn btn-sm btn-default" ng-click="ctrl.clear()">Clear</button>
+										</div>
+									</div>
+								</div>	
+								
+							</div>
+						</div>
+
+					</div>
+					
+					<div class="filter-block-create-or-block">
+						<span class="h4">OR</span>
+					</div>
+				
+					<div class="filter-block-create-button-block">
+						<span class="h4 nbsp">Create a new account</span>
+						<button type="button" 
+								class="btn btn-sm btn-primary" ng-click="ctrl.createAccount(true)">Create account</button>
+					</div>									
+				</div>
+
+			</div>
+		</div>
+
+		<hr/>
+
+		<div class="row">
+			<div class="col-sm-12">
+				<table ng-table="ctrl.table" class="table table-striped twc-table" ng-show="ctrl.table.data.length > 0">
+					<tr ng-repeat="row in $data track by $index">
+						<td data-title="'Create Contact'">
+							<a href="" ng-click="ctrl.createContact(row.sys_id.value)">
+								<i class="fa fa-plus large-fa-text" aria-hidden="true"></i>
+							</a>
+						</td>
+						<td data-title="'Number'" sortable="'number'">
+							<a class="link" target="_blank"
+							   ng-href="customer_account.do?sys_id={{ row.sys_id.value }}"
+							   ng-bind="row.number.display_value"
+							   uib-tooltip="Open in servicenow form" 
+							   tooltip-popup-delay="500"
+							   tooltip-append-to-body="true"></a>
+						</td>
+						<td data-title="'Name'" sortable="'name'" >
+							<span class="link" ng-click="ctrl.editAccount(true, row.sys_id.value)"
+								  uib-tooltip="Edit account" 
+								  tooltip-popup-delay="500"
+								  tooltip-append-to-body="true">{{ row.name.display_value }}</span>
+						</td>
+						<td data-title="'Business unit'" sortable="'u_business_unit'">{{ row.u_business_unit.display_value }}</td>
+
+						<td data-title="'Zip / Postal code'" sortable="'zip'">{{ row.zip.display_value }}</td>
+						<td data-title="'Country'" sortable="'country'">{{ row.country.display_value }}</td>
+						<td data-title="'City'" sortable="'city'">{{ row.city.display_value }}</td>
+						<td data-title="'Street'" sortable="'street'">{{ row.street.display_value }}</td>
+						<td data-title="'Phone'" sortable="'phone'">{{ row.phone.display_value }}</td>
+
+						<td data-title="'Primary Contact'" sortable="'primary_contact'">{{ row.primary_contact.display_value }}</td>						
+						<td data-title="'Is Customer'" sortable="'customer'"><i class="fa fa-check" aria-hidden="true"
+																				ng-if="row.customer.display_value === 'true'"></i></td>
+						<td data-title="'Data Source'" sortable="'u_data_source'">{{ row.u_data_source.display_value }}</td>
+						<td data-title="'Website'" sortable="'website'">{{ row.website.display_value }}</td>
+
+						<td data-title="'Parent Account'" sortable="'account_parent'">{{ row.account_parent.display_value }}</td>
+					</tr>
+				</table>
+
+				<div class="alert alert-info" ng-show="!ctrl.table">Use filters above to search entitlements</div>
+				<div class="alert alert-warning" role="alert" ng-show="ctrl.table.data.length == 0">No records found.</div>
+			</div>
+		</div>
+
+	</form>
+	
+</j:jelly>]]></html>
+        <name>mng-acc-chld-tpl</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-09-22 15:11:33</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>6fe46b410f8eee006c3005cce1050edc</sys_id>
+        <sys_mod_count>24</sys_mod_count>
+        <sys_name>mng-acc-chld-tpl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_page_6fe46b410f8eee006c3005cce1050edc</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-17 09:09:04</sys_updated_on>
+    </sys_ui_page>
+</record_update>

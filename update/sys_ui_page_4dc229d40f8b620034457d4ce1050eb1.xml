@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>true</direct>
+        <endpoint>x_wec_solara_admin_team-team-roles-tpl.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">	
+	
+	<uib-tabset active="2" class="team-tabset">
+		<uib-tab index="1" select="ctrl.openTeamInfo()" heading="Team Information"></uib-tab>
+		<uib-tab index="2" heading="Biz Dev Team Manager" class="team-tab">
+
+			<div class="team-tab__body team-tab__body_roles ">
+				<form name="ctrl.teamForm" novalidate="novalidate">
+
+					<div class="form-group">
+						<label class="control-label">Select one or more Biz Dev Team members to be inherit the Biz Dev Team Manager role</label>
+						
+						<div class="row">
+							<div class="package-child">
+								<div class="package-child-list-container package-child-list-container_selectable">
+									<select class="form-control" multiple="multiple"
+											ng-model="ctrl.selectableModel"
+											ng-options="item as item.name for item in ctrl.teamMembers | orderBy: 'name'">
+									</select>
+								</div>
+
+								<div class="package-child-btn-container">
+									<button class="btn btn-default btn-sm package-child-btn"
+											ng-disabled="!ctrl.selectableModel.length"
+											ng-click="ctrl.select(ctrl.selectableModel)">
+										<i aria-hidden="true" class="fa fa-chevron-right"></i>
+									</button>
+									<button class="btn btn-default btn-sm package-child-btn"
+											ng-disabled="!ctrl.selectedModel.length"
+											ng-click="ctrl.unselect(ctrl.selectedModel)">
+										<i aria-hidden="true" class="fa fa-chevron-left"></i>
+									</button>
+								</div>
+
+								<div class="package-child-list-container">
+									<select class="form-control" name="teamManagers" multiple="multiple"
+											ng-model="ctrl.selectedModel"
+											ng-options="item as item.name for item in ctrl.teamManagers">
+									</select>
+								</div>
+							</div>	
+						</div>
+					</div>
+
+					<div class="form-group">
+						<button type="button" 
+								ng-disabled="ctrl.teamForm.$pristine || ctrl.teamForm.$invalid"
+								ng-click="ctrl.submit()"
+								class="btn btn-sm btn-primary pull-right">Save</button>						
+					</div>
+
+				</form>
+			</div>
+			
+		</uib-tab>
+	</uib-tabset>
+				
+</j:jelly>]]></html>
+        <name>team-team-roles-tpl</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-11-08 14:50:09</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>4dc229d40f8b620034457d4ce1050eb1</sys_id>
+        <sys_mod_count>16</sys_mod_count>
+        <sys_name>team-team-roles-tpl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_page_4dc229d40f8b620034457d4ce1050eb1</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-10 15:33:35</sys_updated_on>
+    </sys_ui_page>
+</record_update>

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.mng-acc-ac-mdl-ctrl</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .controller('ManageAccountCreateAccountModalCtrl', ManageAccountCreateAccountModalCtrl);
+
+    ManageAccountCreateAccountModalCtrl.$inject = ['$scope', '$uibModalInstance', '$q', 'AccountFactory', 'SearchService', 'data'];
+
+    function ManageAccountCreateAccountModalCtrl($scope, $uibModalInstance, $q, AccountFactory, SearchService, data) {
+		var ctrl = this;
+		
+		ctrl.searchParentAccount = searchParentAccount;
+		ctrl.searchAccountNameDuplicate = searchAccountNameDuplicate;
+		ctrl.getTitle = getTitle;
+		
+		ctrl.ok = ok;
+		ctrl.cancel = cancel;
+		
+		init();
+		
+		
+		function init() {
+			ctrl.sysId = data.sysId;
+			
+			ctrl.isChildAccount = data.isChildAccount;
+
+			ctrl.fields = {};
+			
+			$q.all([
+				loadBusinessUnits(),
+				loadDataSources(),
+			]).then(function (responses) {
+				return !!ctrl.sysId ? loadAccount() : responses;
+			}).then(function (response) {
+				ctrl.parentAccountSysId = data.parentAccountSysId || (!!ctrl.account ? ctrl.account.account_parent.value : undefined);
+
+				return !!ctrl.parentAccountSysId ? loadParentAccount() : response;
+			}).then(function (response) {
+				clear();
+				!!ctrl.account && setFormDirty();
+			});
+			
+		}
+		
+		function clear() {
+			var defaultFields;
+						
+			if (!!ctrl.account) {
+				defaultFields = {
+					parentAccount: ctrl.parentAccount,
+					name: ctrl.account.name,
+					city: ctrl.account.city,
+					country: ctrl.account.country,
+					state: ctrl.account.state,
+					phone: ctrl.account.phone,
+					street: ctrl.account.street,
+					website: ctrl.account.website,
+					zip: ctrl.account.zip,
+					businessUnit: getItemFromListByValue(ctrl.businessUnits, ctrl.account.u_business_unit),
+					dataSource: getItemFromListByValue(ctrl.dataSources, ctrl.account.u_data_source),
+					customer: (ctrl.account.customer === 'true') ? true : false
+				};
+			} else {
+				defaultFields = {
+					parentAccount: ctrl.parentAccount,
+					businessUnit: getItemFromListByValue(ctrl.businessUnits, 'Weather API'),
+					dataSource: getItemFromListByValue(ctrl.dataSources, 'Solara'),
+					customer: true
+				};				
+			}
+			
+			angular.extend(ctrl.fields, defaultFields);
+		}
+		
+		function ok() {
+			submit().then(
+				function (response) {
+					$uibModalInstance.close(response);
+				},
+				function (response) {
+					$uibModalInstance.dismiss(response);
+				}
+			);			
+		}
+
+		function cancel() {
+			$uibModalInstance.dismiss('cancel');
+		}
+		
+		function searchParentAccount(name) {
+			return SearchService.searchParentAccount(name).then(function (response) {
+				return response.data.result;
+			});			
+		}
+		
+		function searchAccountNameDuplicate(name) {
+			return SearchService.searchAccount(name, true).then(function (response) {
+				var result = response.data.result;
+				
+				if (!!ctrl.account) {
+					result = result.filter(function (value) {
+						return value.sys_id !== ctrl.account.sys_id; 
+					});
+				}
+				
+				return result;
+			});						
+		}
+
+		function loadAccount() {
+			var params = {
+				sys_id: ctrl.sysId
+			};
+			
+			return AccountFactory.get(params).$promise.then(function (response) {
+				ctrl.account = response.result;
+				return response;
+			});			
+		}
+		
+		function loadParentAccount() {
+			var params = {
+				sys_id: ctrl.parentAccountSysId
+			};
+			
+			return AccountFactory.get(params).$promise.then(function (response) {
+				ctrl.parentAccount = response.result;
+				return response;
+			});			
+		}
+		
+		function loadBusinessUnits() {
+			return AccountFactory.businessUnitChoice().$promise.then(function (response) {
+				ctrl.businessUnits = response.result;				
+				return response;
+			});			
+		}
+
+		function loadDataSources() {
+			return AccountFactory.dataSourceChoice().$promise.then(function (response) {
+				ctrl.dataSources = response.result;
+				return response;
+			});			
+		}
+		
+		function submit() {
+			var params = {
+				city: ctrl.fields.city,
+				country: ctrl.fields.country,
+				name: ctrl.fields.name,
+				phone: ctrl.fields.phone,
+				street: ctrl.fields.street,
+				website: ctrl.fields.website,
+				zip: ctrl.fields.zip,
+				u_business_unit: (!!ctrl.fields.businessUnit) ? ctrl.fields.businessUnit.value : undefined,
+				u_data_source: (!!ctrl.fields.dataSource) ? ctrl.fields.dataSource.value : undefined,
+				state: ctrl.fields.state,
+				customer: ctrl.fields.customer
+			}; 
+			
+			if (!!ctrl.fields.parentAccount && !!ctrl.fields.parentAccount.sys_id) {
+				params.account_parent = ctrl.fields.parentAccount.sys_id;
+			}
+			
+			
+			var promise;
+			
+			if (!!ctrl.account) {
+				var headParams = {
+					sys_id: ctrl.account.sys_id
+				};
+				
+				promise = AccountFactory.update(headParams, params).$promise;
+			} else {
+				promise = AccountFactory.create(params).$promise;
+			}
+			
+			return promise.then(function (response) {
+				ctrl.sysId = response.result.sys_id;
+				return loadAccount();
+			}).then(function (response) {
+				return response.result;
+			});			
+		}
+		
+		function getItemFromListByValue(list, value) {
+			if (!list || !list.length) {
+				return null;
+			}
+			
+			var filtredList = list.filter(function (item) {
+				return item.value === value;
+			});
+			
+			return !!filtredList.length ? filtredList[0] : null;
+		}
+		
+		function getTitle() {
+			return (!ctrl.sysId) ? 'Create Account' : 'Edit Account';
+		}
+		
+		function setFormDirty() {
+			for (var fieldName in ctrl.accountForm) {
+				if (fieldName[0] !== '$' 
+					&& ctrl.accountForm.hasOwnProperty(fieldName) 
+					&& ctrl.accountForm[fieldName] 
+					&& ctrl.accountForm[fieldName].$setDirty) {
+					ctrl.accountForm[fieldName].$setDirty();
+				}
+			}
+		}
+
+    }
+})();
+
+]]></script>
+        <script_name>mng-acc-ac-mdl-ctrl</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-09-23 13:47:19</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>77ead8610f8622406c3005cce1050e3b</sys_id>
+        <sys_mod_count>55</sys_mod_count>
+        <sys_name>x_wec_solara_admin.mng-acc-ac-mdl-ctrl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_77ead8610f8622406c3005cce1050e3b</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-25 08:48:30</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

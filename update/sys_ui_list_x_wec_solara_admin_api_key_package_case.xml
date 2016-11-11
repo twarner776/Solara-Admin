@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_ui_list parent="" relationship="" sys_domain="global" table="x_wec_solara_admin_api_key_package" version="2" view="case">
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>entitlement</element>
+            <list_id display_value="x_wec_solara_admin_api_key_package" element="NULL" name="x_wec_solara_admin_api_key_package" parent="NULL" relationship="NULL" sys_domain="global" view="f1e97a680f40a200f7cee388b1050edd">cf6637c30f7d2e006c3005cce1050e79</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>0</position>
+            <sum>false</sum>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:19:49</sys_created_on>
+            <sys_id>c36637c30f7d2e006c3005cce1050e7a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:19:49</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>solara_api_endpoint</element>
+            <list_id display_value="x_wec_solara_admin_api_key_package" element="NULL" name="x_wec_solara_admin_api_key_package" parent="NULL" relationship="NULL" sys_domain="global" view="f1e97a680f40a200f7cee388b1050edd">cf6637c30f7d2e006c3005cce1050e79</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>1</position>
+            <sum>false</sum>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:19:49</sys_created_on>
+            <sys_id>476637c30f7d2e006c3005cce1050e7a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:19:49</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>solara_api_key</element>
+            <list_id display_value="x_wec_solara_admin_api_key_package" element="NULL" name="x_wec_solara_admin_api_key_package" parent="NULL" relationship="NULL" sys_domain="global" view="f1e97a680f40a200f7cee388b1050edd">cf6637c30f7d2e006c3005cce1050e79</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>2</position>
+            <sum>false</sum>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:19:49</sys_created_on>
+            <sys_id>c76637c30f7d2e006c3005cce1050e7a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:19:49</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>solara_api_package</element>
+            <list_id display_value="x_wec_solara_admin_api_key_package" element="NULL" name="x_wec_solara_admin_api_key_package" parent="NULL" relationship="NULL" sys_domain="global" view="f1e97a680f40a200f7cee388b1050edd">cf6637c30f7d2e006c3005cce1050e79</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>3</position>
+            <sum>false</sum>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:19:49</sys_created_on>
+            <sys_id>4b6637c30f7d2e006c3005cce1050e7a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:19:49</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>solara_api_plan</element>
+            <list_id display_value="x_wec_solara_admin_api_key_package" element="NULL" name="x_wec_solara_admin_api_key_package" parent="NULL" relationship="NULL" sys_domain="global" view="f1e97a680f40a200f7cee388b1050edd">cf6637c30f7d2e006c3005cce1050e79</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>4</position>
+            <sum>false</sum>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:19:49</sys_created_on>
+            <sys_id>cb6637c30f7d2e006c3005cce1050e7a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:19:49</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element/>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <name>x_wec_solara_admin_api_key_package</name>
+            <parent/>
+            <position/>
+            <relationship/>
+            <sum>false</sum>
+            <sys_class_name>sys_ui_list</sys_class_name>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-09-16 11:19:49</sys_created_on>
+            <sys_customer_update>true</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_id>cf6637c30f7d2e006c3005cce1050e79</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_wec_solara_admin_api_key_package</sys_name>
+            <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+            <sys_update_name>sys_ui_list_x_wec_solara_admin_api_key_package_case</sys_update_name>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-09-16 11:19:49</sys_updated_on>
+            <sys_user/>
+            <view display_value="Case" name="case">f1e97a680f40a200f7cee388b1050edd</view>
+            <view_name/>
+        </sys_ui_list>
+    </sys_ui_list>
+</record_update>

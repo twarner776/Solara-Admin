@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.team.app</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+angular
+    .module('twc-product', [
+        'ngMessages',
+		'ngResource',
+        'ngAnimate',
+        'ngSanitize',
+		'ngTable',
+        'blockUI',
+        'ui.bootstrap',
+		'ui.router',
+		'toastr',
+		'ui.select',
+		'ngIntlTelInput'
+    ])
+
+	.config(['$stateProvider', '$urlRouterProvider',  function($stateProvider, $urlRouterProvider) {
+		
+		$urlRouterProvider.when('', '/team-list');
+		
+		$stateProvider
+			.state('team-list', {
+				url: '/team-list',
+				controller: 'TeamListCtrl',
+				controllerAs: 'ctrl',
+				templateUrl: 'x_wec_solara_admin_team-team-list-tpl.do',
+			});
+		
+		$stateProvider
+			.state('team-list.team-info', {
+				url: '/team/{sysId}/team-info',
+				controller: 'TeamInfoCtrl',
+				controllerAs: 'ctrl',
+				templateUrl: 'x_wec_solara_admin_team-team-info-tpl.do'
+			});
+		
+		$stateProvider
+			.state('team-list.roles', {
+				url: '/team/{sysId}/roles',
+				controller: 'TeamRolesCtrl',
+				controllerAs: 'ctrl',
+				templateUrl: 'x_wec_solara_admin_team-team-roles-tpl.do'
+			});
+
+		$stateProvider
+			.state('team-list.new-team', {
+				url: '/new-team',
+				controller: 'TeamInfoCtrl',
+				controllerAs: 'ctrl',
+				templateUrl: 'x_wec_solara_admin_team-team-info-tpl.do'
+			});		
+	}])
+
+    .config(['blockUIConfig', function(blockUIConfig) {
+        blockUIConfig.delay = 400;
+		
+        blockUIConfig.requestFilter = function(config) {
+			
+			if(config.params && config.params.hasOwnProperty('preloader')){
+				return false;
+			}
+        };
+		
+    }])
+
+	.run(function ($http, $templateCache) {
+		$http.defaults.headers.common['X-UserToken'] = userToken; 
+	});
+	
+
+	angular.element(document).ready(function() {
+		angular.bootstrap(document, ['twc-product']);  
+	});
+		
+})();
+
+
+]]></script>
+        <script_name>team.app</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-27 13:13:46</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>261d8f5c0f36ea006c3005cce1050ee6</sys_id>
+        <sys_mod_count>11</sys_mod_count>
+        <sys_name>x_wec_solara_admin.team.app</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_261d8f5c0f36ea006c3005cce1050ee6</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-09 11:19:21</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

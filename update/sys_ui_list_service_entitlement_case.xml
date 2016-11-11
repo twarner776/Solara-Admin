@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_ui_list parent="" relationship="" sys_domain="global" table="service_entitlement" version="2" view="case">
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>entitlement_name</element>
+            <list_id display_value="service_entitlement" element="NULL" name="service_entitlement" parent="NULL" relationship="NULL" sys_domain="51d811fad7223100b7490ee60e61034f" view="f1e97a680f40a200f7cee388b1050edd">8c1a6173c3800200b12d9f2974d3ae30</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>0</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2015-05-22 16:49:51</sys_created_on>
+            <sys_id>401a6173c3800200b12d9f2974d3ae31</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2015-05-22 16:49:51</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>contract</element>
+            <list_id display_value="service_entitlement" element="NULL" name="service_entitlement" parent="NULL" relationship="NULL" sys_domain="51d811fad7223100b7490ee60e61034f" view="f1e97a680f40a200f7cee388b1050edd">8c1a6173c3800200b12d9f2974d3ae30</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>1</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2015-05-22 16:49:51</sys_created_on>
+            <sys_id>801a6173c3800200b12d9f2974d3ae31</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2015-05-22 16:49:51</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>product</element>
+            <list_id display_value="service_entitlement" element="NULL" name="service_entitlement" parent="NULL" relationship="NULL" sys_domain="51d811fad7223100b7490ee60e61034f" view="f1e97a680f40a200f7cee388b1050edd">8c1a6173c3800200b12d9f2974d3ae30</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>2</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2015-05-22 16:49:51</sys_created_on>
+            <sys_id>c01a6173c3800200b12d9f2974d3ae31</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2015-05-22 16:49:51</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>account</element>
+            <list_id display_value="service_entitlement" element="NULL" name="service_entitlement" parent="NULL" relationship="NULL" sys_domain="51d811fad7223100b7490ee60e61034f" view="f1e97a680f40a200f7cee388b1050edd">8c1a6173c3800200b12d9f2974d3ae30</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>3</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2015-05-22 16:49:51</sys_created_on>
+            <sys_id>041a6173c3800200b12d9f2974d3ae31</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2015-05-22 16:49:51</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>business_hour</element>
+            <list_id display_value="service_entitlement" element="NULL" name="service_entitlement" parent="NULL" relationship="NULL" sys_domain="51d811fad7223100b7490ee60e61034f" view="f1e97a680f40a200f7cee388b1050edd">8c1a6173c3800200b12d9f2974d3ae30</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>4</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2015-05-22 16:49:51</sys_created_on>
+            <sys_id>441a6173c3800200b12d9f2974d3ae31</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2015-05-22 16:49:51</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>remaining_units</element>
+            <list_id display_value="service_entitlement" element="NULL" name="service_entitlement" parent="NULL" relationship="NULL" sys_domain="51d811fad7223100b7490ee60e61034f" view="f1e97a680f40a200f7cee388b1050edd">8c1a6173c3800200b12d9f2974d3ae30</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>5</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2015-05-22 16:49:51</sys_created_on>
+            <sys_id>841a6173c3800200b12d9f2974d3ae31</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2015-05-22 16:49:51</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>start_date</element>
+            <list_id display_value="service_entitlement" element="NULL" name="service_entitlement" parent="NULL" relationship="NULL" sys_domain="51d811fad7223100b7490ee60e61034f" view="f1e97a680f40a200f7cee388b1050edd">8c1a6173c3800200b12d9f2974d3ae30</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>6</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2015-05-22 16:49:51</sys_created_on>
+            <sys_id>c41a6173c3800200b12d9f2974d3ae31</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2015-05-22 16:49:51</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>end_date</element>
+            <list_id display_value="service_entitlement" element="NULL" name="service_entitlement" parent="NULL" relationship="NULL" sys_domain="51d811fad7223100b7490ee60e61034f" view="f1e97a680f40a200f7cee388b1050edd">8c1a6173c3800200b12d9f2974d3ae30</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>7</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2015-05-22 16:49:51</sys_created_on>
+            <sys_id>081a6173c3800200b12d9f2974d3ae31</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2015-05-22 16:49:51</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element/>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <name>service_entitlement</name>
+            <parent/>
+            <position/>
+            <relationship/>
+            <sum>false</sum>
+            <sys_class_name>sys_ui_list</sys_class_name>
+            <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+            <sys_created_on>2016-10-12 17:04:42</sys_created_on>
+            <sys_customer_update>true</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_id>e0be3ea70f1ae20034457d4ce1050e4b</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>service_entitlement</sys_name>
+            <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+            <sys_update_name>sys_ui_list_service_entitlement_case</sys_update_name>
+            <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+            <sys_updated_on>2016-10-12 17:04:42</sys_updated_on>
+            <sys_user display_value="Oleg Voropayev">95e5e0f70ff0a6006c3005cce1050eed</sys_user>
+            <view display_value="Case" name="case">f1e97a680f40a200f7cee388b1050edd</view>
+            <view_name/>
+        </sys_ui_list>
+    </sys_ui_list>
+</record_update>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ws_operation">
+    <sys_ws_operation action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl/>
+        <http_method>GET</http_method>
+        <name>Contact Search</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+	var queryParams = getQueryParams(request);
+	var contactRecord = prepareContactQuery(queryParams);
+	
+	contactRecord.query();
+		
+	var headers = {};
+	headers['X-Total-Count'] = '' + contactRecord.getRowCount();
+	response.setHeaders(headers);
+		
+	var result = [];
+	
+	if (contactRecord.size <= queryParams.offset) {
+		return result; 
+	}
+
+	// can not use the setLocation method to set offset not in global application 
+	for (i = 0; i < queryParams.offset && contactRecord.hasNext(); i++) {
+		contactRecord.next();
+	}
+
+	for (i = 0; i < queryParams.limit && contactRecord.next(); i++) {
+		result.push(contactRecordToResultItem(contactRecord));		
+	}
+			
+	return result;
+	
+	
+	
+	function getQueryParams(request) {
+		var params = request.queryParams;
+		
+		return {
+			businessUnits: params.u_business_unit,
+			products: params.product,
+			accounts: params.account,
+			name: (!!params.name) ? params.name[0] : undefined,
+			email: (!!params.email) ? params.email[0] : undefined,
+			limit: (!!params.limit) ? params.limit[0] : 25,
+			offset: (!!params.offset) ? params.offset[0] : 0,
+			orderByAsc: (!!params.orderbyasc) ? params.orderbyasc[0] : undefined,
+			orderByDesc: (!!params.orderbydesc) ? params.orderbydesc[0] : undefined
+		};
+	}
+
+	function prepareContactQuery(params) {
+		var record = new GlideRecord('customer_contact');
+	
+		if (!!params.businessUnits) {
+			record.addQuery('u_business_unit', 'IN', params.businessUnits);	
+		}
+
+		if (!!params.products) {
+			var contactSysIds = getContactSysIdsByProduct(params.products);
+
+			if (!!contactSysIds.length) {
+				record.addQuery('sys_id', 'IN', contactSysIds);
+			} else {
+				record.addNullQuery('sys_id');
+			}
+		}
+
+		if (!!params.accounts) {
+			record.addQuery('account', 'IN', params.accounts);	
+		}
+
+		if (!!params.name) {
+			record.addQuery('name', 'CONTAINS', params.name);	
+		}
+
+		if (!!params.email) {
+			record.addQuery('email', 'CONTAINS', params.email);	
+		}
+
+		if (!!params.orderByAsc) {
+			record.orderBy(params.orderByAsc);
+		}
+
+		if (!!params.orderByDesc) {
+			record.orderByDesc(params.orderByDesc);
+		}
+	
+		return record;
+	}
+		
+	function getContactSysIdsByProduct(productSysIds) {
+		var entitlementAggregate = new GlideAggregate('service_entitlement');
+		entitlementAggregate.addQuery('product', 'IN', productSysIds);
+		entitlementAggregate.addAggregate('COUNT');
+		entitlementAggregate.groupBy('u_entitled_user');
+		
+		entitlementAggregate.query();
+		
+		var result = [];
+
+		while(entitlementAggregate.next()) {
+			result.push(entitlementAggregate.getValue('u_entitled_user'));
+		}
+
+		return result;
+	}
+	
+	function contactRecordToResultItem(record) {
+		return {
+			sys_id: {
+				value: record.getValue('sys_id')
+			},
+			name: {
+				value: record.getValue('name'),
+				display_value: record.name.getDisplayValue()
+			},
+			u_business_unit: {
+				value: record.getValue('u_business_unit'),
+				display_value: record.u_business_unit.getDisplayValue()
+			},
+			account: {
+				value: record.getValue('account'),
+				display_value: record.account.getDisplayValue()
+			},
+			email: {
+				value: record.getValue('email'),
+				display_value: record.email.getDisplayValue()
+			},
+			mobile_phone: {
+				value: record.getValue('mobile_phone'),
+				display_value: record.mobile_phone.getDisplayValue()
+			},
+			phone: {
+				value: record.getValue('phone'),
+				display_value: record.phone.getDisplayValue()
+			},
+			time_zone: {
+				value: record.getValue('time_zone'),
+				display_value: record.time_zone.getDisplayValue()
+			},
+			u_data_source: {
+				value: record.getValue('u_data_source'),
+				display_value: record.u_data_source.getDisplayValue()
+			},
+			u_client_class: {
+				value: record.getValue('u_client_class'),
+				display_value: record.u_client_class.getDisplayValue()
+			},
+			u_registration: {
+				value: record.getValue('u_registration'),
+				display_value: record.u_registration.getDisplayValue()
+			}
+		};
+		
+/*
+		// can't use getFields method not in  global application 
+		var fields = contactRecord.getFields();
+
+		for (var i = 0; i < fields.size(); i++) {
+			var field = fields.get(i);
+			contact[field.getName()] = field.getElementValue(field.getName());
+		}
+*/
+	} 
+		
+})(request, response);
+]]></operation_script>
+        <operation_uri>/api/x_wec_solara_admin/contact_search</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/</relative_path>
+        <request_example/>
+        <requires_acl_authorization>false</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-07 14:58:59</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>12e138820f16260034457d4ce1050ee4</sys_id>
+        <sys_mod_count>31</sys_mod_count>
+        <sys_name>Contact Search</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ws_operation_12e138820f16260034457d4ce1050ee4</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-10 11:02:19</sys_updated_on>
+        <web_service_definition display_value="Contact Search">290130820f16260034457d4ce1050efb</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+</record_update>

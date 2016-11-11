@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>true</direct>
+        <endpoint>x_wec_solara_admin_mng-entmt-mdl-tpl.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	
+	<form name="m.renewEntitlementModalForm" novalidate="novalidate">
+		<div class="modal-header">
+			<h3 class="modal-title">Renew Entitlements</h3>
+		</div>
+		<div class="modal-body form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-6">
+					<div class="radio">
+						<label class="control-label">
+							<input type="radio" name="dateType" ng-value="::m.dateTypes.COUNT_DAYS" required="required"
+								   ng-click="m.initField()"
+								   ng-model="m.dateType" />
+							<span ng-bind="::m.dateTypes.COUNT_DAYS.label" />
+						</label>
+					</div>
+				</div>
+
+				<div class="col-sm-6"> 
+					<select name="countDays" class="form-control" required="required" ng-disabled="m.dateType !== m.dateTypes.COUNT_DAYS"
+							ng-model="m.countDays"
+							ng-options="item.label for item in ::m.countDaysArray">
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-sm-6">
+					<div class="radio">
+						<label class="control-label">
+							<input type="radio" name="dateType" ng-value="::m.dateTypes.END_DATE" required="required"
+								   ng-click="m.initField()"
+								   ng-model="m.dateType" />
+							<span ng-bind="::m.dateTypes.END_DATE.label" />
+						</label>
+					</div>
+				</div>
+
+				<div class="col-sm-6"> 
+					<div class="input-group" id="lastDay">
+						<input type="text" class="form-control" required="required" ng-disabled="m.dateType !== m.dateTypes.END_DATE"
+							   uib-datepicker-popup="yyyy-MM-dd"						 
+							   is-open="m.datapickerOpened" show-button-bar="false"
+							   datepicker-options="::m.datepickerOptions"
+							   ng-model-options="{timezone: 'utc'}"
+							   ng-model="m.endDate" 
+							   ng-click="m.datapickerOpened = true" />
+						<span class="input-group-addon" ng-click="m.datapickerOpened = true" ng-disabled="m.dateType !== m.dateTypes.END_DATE">
+							<i class="glyphicon glyphicon-calendar" />
+						</span>
+					</div>			
+				</div>
+			</div>
+		</div>
+
+		<div class="modal-footer">
+			<button class="btn btn-default btn-sm" type="button" ng-click="m.cancel()">Cancel</button>
+			<button class="btn btn-primary btn-sm" type="button"
+					ng-disabled="m.renewEntitlementModalForm.$invalid"
+					ng-click="m.ok(m.dateType)">Ok</button>
+		</div>
+	</form>
+</j:jelly>]]></html>
+        <name>mng-entmt-mdl-tpl</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-09-15 16:13:08</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>3e1bef360fb52e006c3005cce1050e6a</sys_id>
+        <sys_mod_count>104</sys_mod_count>
+        <sys_name>mng-entmt-mdl-tpl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_page_3e1bef360fb52e006c3005cce1050e6a</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-09-28 16:33:47</sys_updated_on>
+    </sys_ui_page>
+</record_update>

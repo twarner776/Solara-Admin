@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.team.search-serv</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .service('SearchService', SearchService);
+
+    SearchService.$inject = ['AccountAuthenticationFactory', 'ReferenceBookFactory', 'AccountFactory', 'ContactFactory', 'PackageFactory', 'PlanFactory', 'UserFactory', 'SysUserRoleFactory'];
+
+    function SearchService(AccountAuthenticationFactory, ReferenceBookFactory, AccountFactory, ContactFactory, PackageFactory, PlanFactory, UserFactory, SysUserRoleFactory) {
+		
+		this.searchBusinessUnit = searchBusinessUnit;	
+		this.searchAccount = searchAccount;
+		this.searchParentAccount = searchParentAccount;
+		this.searchChildAccount = searchChildAccount;
+		this.searchProduct = searchProduct;
+		this.searchContactByNameOrEmail = searchContactByNameOrEmail;
+		this.searchContactByEmailExact = searchContactByEmailExact;
+		this.searchInternalUserByNameOrEmail = searchInternalUserByNameOrEmail;
+		this.searchUserByNameOrEmail = searchUserByNameOrEmail;
+		this.searchPackage = searchPackage;
+		this.searchPlan = searchPlan; 
+		this.searchRoleByNameExact = searchRoleByNameExact;
+				
+		
+		function searchBusinessUnit(name) {
+			var query = 'name=customer_account' + '^element=u_business_unit';
+			
+			if (!!name) {
+				query += '^valueLIKE' + name;
+			}
+			
+			var params = angular.extend({
+				sysparm_query: query
+			}, getDefaultParamsObj());
+			
+            return ReferenceBookFactory.sysСhoice(params).$promise;
+		}
+
+		function searchParentAccount(name, isExact) {
+			return baseSearchAccount(name, true, false, isExact);
+		}
+
+		function searchChildAccount(name, isExact) {
+			return baseSearchAccount(name, false, true, isExact);
+		}
+
+		function searchAccount(name, isExact) {
+			return baseSearchAccount(name, false, false, isExact);
+		}
+		
+		function searchProduct(name) {
+			var query = '';
+			
+			if (!!name) {
+				query += 'display_nameLIKE' + name;
+			}
+			
+			var params = angular.extend({
+				sysparm_query: query
+			}, getDefaultParamsObj());
+			
+            return AccountAuthenticationFactory.product(params).$promise;
+		}
+		
+		function searchContactByNameOrEmail(value, accountSysId) {
+            var query = [];
+			
+			!!value && query.push('nameLIKE' + value + '^OR' + 'emailLIKE' + value);
+			!!accountSysId && query.push('account=' + accountSysId);
+			
+			var params = angular.extend({
+				sysparm_query: query.join('^')
+			}, getDefaultParamsObj());
+			
+			return ContactFactory.list(params).$promise;
+		}
+		
+		function searchContactByEmailExact(email) {
+            var query = '';
+			
+			if (!!email) {
+				query += 'email=' + email;
+			}
+			
+			var params = angular.extend({
+				sysparm_query: query
+			}, getDefaultParamsObj());
+			
+			return ContactFactory.list(params).$promise;
+		}
+
+		function searchInternalUserByNameOrEmail(value) {
+            var query = [];
+			
+			!!value && query.push('nameLIKE' + value + '^OR' + 'emailLIKE' + value);
+			query.push('u_employee_typeISNOTEMPTY');
+			
+			var params = angular.extend({
+				sysparm_query: query.join('^')
+			}, getDefaultParamsObj());
+			
+			return UserFactory.list(params).$promise;			
+		}
+
+		function searchUserByNameOrEmail(value) {
+            var query = [];
+			
+			!!value && query.push('nameLIKE' + value + '^OR' + 'emailLIKE' + value);
+			
+			var params = angular.extend({
+				sysparm_query: query.join('^')
+			}, getDefaultParamsObj());
+			
+			return UserFactory.list(params).$promise;			
+		}
+
+		
+		function searchPackage(name) {
+			var query = 'u_application_type=Package';
+			
+			if (!!name) {
+				query += '^display_nameLIKE' + name;
+			}
+
+			var params = angular.extend({
+				sysparm_query: query
+			}, getDefaultParamsObj());
+			
+            return PackageFactory.list(params).$promise;
+		}
+		
+		function searchPlan(name) {
+			var query = '';
+			
+			if (!!name) {
+				query += 'nameLIKE' + name;
+			}
+			
+			var params = angular.extend({
+				sysparm_query: query
+			}, getDefaultParamsObj());
+			
+            return PlanFactory.list(params).$promise;
+		} 
+		
+		function searchRoleByNameExact(name) {
+            var query = '';
+			
+			if (!!name) {
+				query += 'name=' + name;
+			}
+			
+			var params = angular.extend({
+				sysparm_query: query
+			}, getDefaultParamsObj());
+			
+			return SysUserRoleFactory.list(params).$promise;
+			
+		}
+		
+		
+		function baseSearchAccount(name, parentOnly, childOnly, isExact) {
+            var query = '';
+			
+			if (!!name) {
+				query += 'name' + ((!!isExact) ? '=' : 'LIKE')  + name;
+			}
+
+			query += (parentOnly === true) ? '^account_parentISEMPTY' : '';
+			query += (childOnly === true) ? '^account_parentISNOTEMPTY' : '';
+			
+			var params = angular.extend({
+				sysparm_query: query
+			}, getDefaultParamsObj());
+			
+			return AccountFactory.list(params).$promise;
+		}
+
+		
+		function getDefaultParamsObj() {
+			return {
+				sysparm_limit: 20, 
+				preloader: false
+			};
+		}
+
+    }
+})();
+
+]]></script>
+        <script_name>team.search-serv</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-28 08:19:06</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>01bfdfa00f722e006c3005cce1050ed1</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>x_wec_solara_admin.team.search-serv</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_01bfdfa00f722e006c3005cce1050ed1</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-08 15:33:30</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

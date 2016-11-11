@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Plan" max_length="40" name="x_wec_solara_admin_plan" type="collection">
+        <element label="Name" max_length="100" name="name" type="string"/>
+        <element label="Solara Client ID" max_length="40" name="solara_client_id" type="string"/>
+        <element label="Biz Dev Team" max_length="1000" name="u_biz_dev_team" reference="x_wec_solara_admin_biz_dev_team" type="glide_list"/>
+        <element label="Solara ID" max_length="80" name="u_solara_id" type="string"/>
+        <element label="Plan ID" max_length="80" name="u_solara_plan_id" type="string"/>
+        <element label="TPD" max_length="100" name="u_tpd" type="string"/>
+    </element>
+</database>

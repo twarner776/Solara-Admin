@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ws_operation">
+    <sys_ws_operation action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl/>
+        <http_method>GET</http_method>
+        <name>Get Packages available for current user</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+	var queryParams = getQueryParams(request);
+	var record = executeQuery(queryParams);
+	
+	var headers = {};
+	headers['X-Total-Count'] = '' + record.getRowCount();
+	response.setHeaders(headers);
+
+	var result = [];
+	
+	for (i = 0; record.next(); i++) {
+		if (!!queryParams.sysparmLimit && i >= queryParams.sysparmLimit) {
+			break;
+		}
+		
+		result.push(recordToResultItem(record));		
+	}
+	
+	return result;
+	
+	
+	
+	function getTeamSysIds() {
+		var userSysId = gs.getUserID();
+		
+		var record = new GlideRecord('x_wec_solara_admin_biz_dev_team');
+		record.addQuery('u_team_members', 'CONTAINS', userSysId);
+		
+		record.query();
+		
+		var result = [];
+		
+		while (record.next()) {
+			result.push(record.getValue('sys_id'));
+		}
+		
+		return result;
+	}
+	
+	function getQueryParams(request) {
+		var params = request.queryParams;
+		
+		return {
+			sysparmQuery: params.sysparm_query,
+			sysparmLimit: params.sysparm_limit
+		};
+	}
+
+	function executeQuery(params) {
+		var record = new GlideRecord('cmdb_software_product_model');
+			
+		var teamSysIds = getTeamSysIds();
+		if (!teamSysIds.length) {
+			return record;
+		}
+
+		if (teamSysIds.length === 1) {
+			record.addQuery('u_team_name', teamSysIds[0]);
+		} else {
+			record.addQuery('u_team_name', 'IN', teamSysIds);
+		}
+
+		if (!!params.sysparmQuery) {
+			record.addEncodedQuery(params.sysparmQuery);	
+		}
+		
+		record.query();
+
+		return record;
+	}
+			
+	function recordToResultItem(record) {
+		return {
+			sys_id: record.getValue('sys_id'),
+			name: record.getValue('name'),
+			display_name: record.getValue('display_name'),
+			u_solara_package_id: record.getValue('u_solara_package_id'),
+			u_team_name: record.getValue('u_team_name')
+		};
+		
+	} 
+		
+})(request, response);
+]]></operation_script>
+        <operation_uri>/api/x_wec_solara_admin/bizdev/package</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/package</relative_path>
+        <request_example/>
+        <requires_acl_authorization>false</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-24 12:16:20</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>648fafd30f622e0034457d4ce1050e76</sys_id>
+        <sys_mod_count>11</sys_mod_count>
+        <sys_name>Get Packages available for current user</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ws_operation_648fafd30f622e0034457d4ce1050e76</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-09 15:15:29</sys_updated_on>
+        <web_service_definition display_value="Biz Dev API">2e4f2fd30f622e0034457d4ce1050e37</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+</record_update>

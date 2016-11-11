@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.bizdev-account-auth-c</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .controller('AccountAuthenticationCustContCtrl', AccountAuthenticationCustContCtrl);
+
+    AccountAuthenticationCustContCtrl.$inject = ['$scope', '$uibModal', '$timeout', '$http', '$q', '$element', 'NgTableParams', 'AccountAuthenticationFactory', 'ReferenceBookFactory', 'toastr', 'ngTableEventsChannel', 'uRegistration'];
+
+    function AccountAuthenticationCustContCtrl($scope, $uibModal, $timeout, $http, $q, $element, NgTableParams, AccountAuthenticationFactory, ReferenceBookFactory, toastr, ngTableEventsChannel, uRegistration) {
+		
+        var ac = this;
+		
+		ac.search = search;
+		ac.clear = clear;
+		ac.activate = activate;
+		ac.searchCustomerAccount = searchCustomerAccount;
+		ac.searchBusinessUnit = searchBusinessUnit;
+		ac.searchProduct = searchProduct;
+		ac.uRegistration = uRegistration.result;
+		
+		ac.filter = {};
+		
+		ac.prefix = "";
+		
+        ac.checkboxes = {
+            checked: false,
+            items: {},
+            getCheckedItems: function(){
+                var result = [];
+                _.forIn(this.items, function(value, key) {
+                    if(value && ac.table){
+						var s = {};
+						s[ac.prefix + 'sys_id'] = {value: key};
+                        result.push(_.find(ac.table.data, s))
+                    }
+                });
+
+                return result;
+            }			
+        };
+		
+		
+		function search(){
+			ac.showCheckBox = false;
+			
+			if(!ac.table){
+				ac.table = initTable();
+				
+				ngTableEventsChannel.onAfterReloadData(function(){
+					
+					$timeout(function () {
+						ac.checkboxes.items = {};
+						angular.forEach(ac.table.data, function(item) {
+							ac.checkboxes.items[item[ac.prefix + 'sys_id'].value] = false;
+						});
+						
+						
+					}, 0);
+					
+					if(ac.filter.u_registration == 'Not Registered'){
+						ac.showCheckBox = true;
+					}
+					
+				}, $scope, ac.table);
+				
+				initCheckBox();
+			}else{
+				ac.table.reload();
+			}
+		}
+
+		function clear(){
+			ac.table = null;
+			ac.filter = {
+				u_registration: 'Not Registered'
+			};
+		}
+
+		function activate(){
+
+			var modalInstance = $uibModal.open({
+					
+				templateUrl: '/x_wec_solara_admin_bizdev-account-authentication-active-modal-tpl.do',
+				controller: function ($scope, $uibModalInstance) {
+					var m = this;
+
+					m.ok = ok;
+					m.cancel = cancel;
+
+					function ok () {
+						$uibModalInstance.close();
+					}
+
+					function cancel() {
+						$uibModalInstance.dismiss('cancel');
+					}
+
+				},
+				controllerAs: "m"
+			});
+			
+		
+			modalInstance.result.then(function () {
+				
+				var request = [];
+
+				ac.checkboxes.getCheckedItems().forEach(function(item){
+					request.push(AccountAuthenticationFactory.customerContactUpdate({id: item.sys_id.value}, {
+						u_registration : 'Start Registration'
+					}).$promise);
+
+				});
+
+				$q.all(request).then(function (results) {
+					toastr.success('Account activation workflow started.');
+					ac.table.reload();
+				});
+	
+			  
+			});				
+			
+			
+		}
+		
+		function searchCustomerAccount(name){
+            AccountAuthenticationFactory.customerAccount({sysparm_query: 'name!=""^ORDERBYname^nameLIKE' + name, sysparm_limit: 20, preloader: false}).$promise.then(function(res){
+                ac.customerAccounts = res.result;
+            });
+		}
+
+		function searchBusinessUnit(name){
+            ReferenceBookFactory.sysСhoice({sysparm_query: 'name=customer_account^valueLIKE' + name + '^element=u_business_unit', sysparm_limit: 20, preloader: false}).$promise.then(function(res){
+                ac.businessUnits = res.result;
+            });
+		}
+		
+		function searchProduct(name){
+            AccountAuthenticationFactory.product({sysparm_query: 'ORDERBYdisplay_name^display_nameLIKE' + name, sysparm_limit: 20, preloader: false}).$promise.then(function(res){
+                ac.products = res.result;
+            });
+		}
+		
+		
+		function initTable() {
+			return new NgTableParams({
+				count: 25,
+				sorting: { account: "asc" }, 
+			}, {
+				counts: [25, 50, 100, 200],
+				getData: function(params) {
+					
+					ac.loader = true;
+					
+
+					var filters = params.filter(),
+						filtersArr = [];
+
+					if(ac.filter.products && ac.filter.products.length > 0){
+						ac.prefix = "c_";
+						
+						filtersArr.push(ac.filter.products.map(function(item){return 's_product=' + item.sys_id;}).join('^OR'));
+					}
+					
+					var sorting = Object.keys(params.sorting());
+					if(sorting.length > 0){
+						filtersArr.push('ORDERBY' + (params.sorting()[sorting[0]] === 'desc' ? 'DESC' : '') + ac.prefix + sorting[0]);
+					}
+					
+					
+					filtersArr.push(ac.prefix + 'u_registration=' + ac.filter.u_registration);
+					
+					if(ac.filter.name){
+						filtersArr.push(ac.prefix + 'nameLIKE' + ac.filter.name);
+					}
+					if(ac.filter.email){
+						filtersArr.push(ac.prefix + 'emailLIKE' + ac.filter.email);
+					}
+
+					if(ac.filter.customerAccounts && ac.filter.customerAccounts.length > 0){
+						
+						filtersArr.push(ac.filter.customerAccounts.map(function(item){return ac.prefix + 'account=' + item.sys_id;}).join('^OR'));
+						
+					}
+
+					if(ac.filter.businessUnits && ac.filter.businessUnits.length > 0){
+						
+						filtersArr.push(ac.filter.businessUnits.map(function(item){return ac.prefix + 'u_business_unit=' + item.label;}).join('^OR'));
+						
+					}
+
+					return loadData(ac.prefix ? 'uAccountAuthentication' : 'fullList');
+					
+					function loadData(table){
+						return AccountAuthenticationFactory[table]({
+							sysparm_limit: params.count(),
+							sysparm_offset: (params.page() - 1) * params.count(),
+							sysparm_query: filtersArr.join('^'),
+							sysparm_display_value: 'all',
+							sysparm_suppress_pagination_header: true
+						}).$promise.then(function(res) {
+							ac.loader = false;
+							params.total(res.headers['x-total-count']);
+							return res.data.result;
+						});
+						
+					}
+				}
+			});
+			
+		}
+
+		
+		function initCheckBox(){
+			$scope.$watch(function() {
+			  return ac.checkboxes.checked;
+			}, function(value) {
+				angular.forEach(ac.table.data, function(item) {
+					ac.checkboxes.items[item[ac.prefix + 'sys_id'].value] = value;
+				});
+			});
+			
+			
+			$scope.$watch(function() {
+			  return ac.checkboxes.items;
+			}, function(values) {
+			  var checked = 0, unchecked = 0,
+				  total = ac.table.data.length;
+			  angular.forEach(ac.table.data, function(item) {
+				checked   +=  (ac.checkboxes.items[item[ac.prefix + 'sys_id'].value]) || 0;
+				unchecked += (!ac.checkboxes.items[item[ac.prefix + 'sys_id'].value]) || 0;
+			  });
+			  if ((unchecked == 0) || (checked == 0)) {
+				ac.checkboxes.checked = (checked == total);
+			  }
+			  // grayed checkbox
+			  angular.element($element[0].getElementsByClassName("select-all")).prop("indeterminate", (checked != 0 && unchecked != 0));
+			}, true);			
+			
+		}		
+		
+    }
+
+})();
+
+]]></script>
+        <script_name>bizdev-account-auth-ctrl</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>anton.sychikov.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-28 09:42:13</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>4a8237240fb22e006c3005cce1050ec9</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>x_wec_solara_admin.bizdev-account-auth-c</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_4a8237240fb22e006c3005cce1050ec9</sys_update_name>
+        <sys_updated_by>anton.sychikov.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-28 10:21:07</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

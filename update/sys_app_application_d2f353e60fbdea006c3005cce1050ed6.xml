@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_app_application">
+    <sys_app_application action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <category/>
+        <description/>
+        <device_type>browser</device_type>
+        <hint/>
+        <name>Solara Admin Console</name>
+        <order/>
+        <roles>x_wec_solara_admin.user,sn_customerservice_manager</roles>
+        <sys_class_name>sys_app_application</sys_class_name>
+        <sys_created_by>huy.ngo@weather.com</sys_created_by>
+        <sys_created_on>2016-09-14 19:32:21</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_id>d2f353e60fbdea006c3005cce1050ed6</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>Solara Admin Console</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_app_application_d2f353e60fbdea006c3005cce1050ed6</sys_update_name>
+        <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-09 19:56:37</sys_updated_on>
+        <title>Solara Admin Console</title>
+        <view_name/>
+    </sys_app_application>
+</record_update>

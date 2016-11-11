@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>true</direct>
+        <endpoint>x_wec_solara_admin_team-team-info-tpl.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+	<uib-tabset active="1" class="team-tabset">
+		<uib-tab index="1" heading="Team Information" class="team-tab">
+
+			<div class="team-tab__body">
+				<form name="ctrl.teamForm" novalidate="novalidate">
+
+					<div class="form-group">
+						<label for="name">Team Name</label>
+						<input type="input" class="form-control" id="name" required="required"
+							   ng-model="ctrl.fields.name"
+							   focus="{{ ::ctrl.isShouldBeFocused() }}"/>
+					</div>		
+
+					<div class="form-group">
+
+						<div class="extendable-package-container">
+							<label for="searchContact" class="control-label search-control-label">
+								Search contacts
+							</label>
+
+							<div style="display: flex">
+								<input type="text" class="form-control" id="searchContact" style="margin-right: 5px"
+									   placeholder="Type contact name..."
+									   ng-model="ctrl.contactName"
+									   ng-model-options="{debounce: 300}"
+									   ng-change="ctrl.filterSelectableContacts(ctrl.contactName)" />					
+
+								<button type="button" 
+										ng-click="ctrl.createContact(ctrl.account.sys_id, true)"
+										class="btn btn-sm btn-primary">Create new BizDev user</button>						
+							</div>
+
+						</div>
+
+						<div class="row">				
+							<div class="package-child">
+								<div class="package-child-list-container package-child-list-container_selectable">
+									<select class="form-control" multiple="multiple"
+											ng-model="ctrl.selectableContactsModel"
+											ng-options="item as item.name + '  -  ' + item.email for item in ctrl.selectableContacts | orderBy: 'name'">
+									</select>
+								</div>
+
+								<div class="package-child-btn-container">
+									<button class="btn btn-default btn-sm package-child-btn"
+											ng-disabled="!ctrl.selectableContactsModel.length"
+											ng-click="ctrl.selectContacts(ctrl.selectableContactsModel)">
+										<i aria-hidden="true" class="fa fa-chevron-right"></i>
+									</button>
+									<button class="btn btn-default btn-sm package-child-btn"
+											ng-disabled="!ctrl.selectedContactsModel.length"
+											ng-click="ctrl.unselectContacts(ctrl.selectedContactsModel)">
+										<i aria-hidden="true" class="fa fa-chevron-left"></i>
+									</button>
+								</div>
+
+								<div class="package-child-list-container">
+									<select class="form-control" name="contacts" multiple="multiple"
+											ng-model="ctrl.selectedContactsModel"
+											ng-options="item as item.name for item in ctrl.fields.contacts">
+									</select>
+								</div>
+							</div>				
+						</div>
+
+					</div>			
+
+					<div class="form-group">
+						<button type="button" 
+								ng-disabled="ctrl.teamForm.$pristine || ctrl.teamForm.$invalid"
+								ng-click="ctrl.submit()"
+								class="btn btn-sm btn-primary pull-right">Save</button>						
+					</div>
+
+				</form>
+			</div>
+			
+		</uib-tab>
+		<uib-tab index="2" select="ctrl.openTeamRoles()" heading="Biz Dev Team Manager" disable="::ctrl.isNewTeamOpened()"></uib-tab>
+	</uib-tabset>			
+
+</j:jelly>]]></html>
+        <name>team-team-info-tpl</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-27 14:16:24</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>a8c7eb540fb6ea006c3005cce1050e10</sys_id>
+        <sys_mod_count>36</sys_mod_count>
+        <sys_name>team-team-info-tpl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_page_a8c7eb540fb6ea006c3005cce1050e10</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-10 15:34:04</sys_updated_on>
+    </sys_ui_page>
+</record_update>

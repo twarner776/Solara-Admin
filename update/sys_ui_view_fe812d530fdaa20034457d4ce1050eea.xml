@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_view">
+    <sys_ui_view action="INSERT_OR_UPDATE">
+        <group/>
+        <hidden>false</hidden>
+        <name>rpt-temp7c14311e0f75ea006c3005cce1050e38oleg.voropayev.contractor@weather.com</name>
+        <roles/>
+        <sys_class_name>sys_ui_view</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-11 15:39:14</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>fe812d530fdaa20034457d4ce1050eea</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name/>
+        <sys_package/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name/>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-11 15:39:14</sys_updated_on>
+        <title>Rpt-temp7c14311e0f75ea006c3005cce1050e38oleg.voropayev.contractor@weather.com</title>
+        <user/>
+    </sys_ui_view>
+</record_update>

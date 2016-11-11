@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_ui_list parent="" relationship="" sys_domain="global" table="sp_angular_provider" version="2" view="">
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>name</element>
+            <list_id display_value="sp_angular_provider" element="NULL" name="sp_angular_provider" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">2fade96e0fb026006c3005cce1050e24</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>0</position>
+            <sum>false</sum>
+            <sys_created_by>travis.warner@weather.com</sys_created_by>
+            <sys_created_on>2016-07-26 19:02:39</sys_created_on>
+            <sys_id>23ade96e0fb026006c3005cce1050e25</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>travis.warner@weather.com</sys_updated_by>
+            <sys_updated_on>2016-07-26 19:02:39</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>script</element>
+            <list_id display_value="sp_angular_provider" element="NULL" name="sp_angular_provider" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">2fade96e0fb026006c3005cce1050e24</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>1</position>
+            <sum>false</sum>
+            <sys_created_by>travis.warner@weather.com</sys_created_by>
+            <sys_created_on>2016-07-26 19:02:39</sys_created_on>
+            <sys_id>a3ade96e0fb026006c3005cce1050e25</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>travis.warner@weather.com</sys_updated_by>
+            <sys_updated_on>2016-07-26 19:02:39</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>type</element>
+            <list_id display_value="sp_angular_provider" element="NULL" name="sp_angular_provider" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">2fade96e0fb026006c3005cce1050e24</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>2</position>
+            <sum>false</sum>
+            <sys_created_by>travis.warner@weather.com</sys_created_by>
+            <sys_created_on>2016-07-26 19:02:39</sys_created_on>
+            <sys_id>27ade96e0fb026006c3005cce1050e25</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>travis.warner@weather.com</sys_updated_by>
+            <sys_updated_on>2016-07-26 19:02:39</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element/>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <name>sp_angular_provider</name>
+            <parent/>
+            <position/>
+            <relationship/>
+            <sum>false</sum>
+            <sys_class_name>sys_ui_list</sys_class_name>
+            <sys_created_by>peter.crivello@weather.com</sys_created_by>
+            <sys_created_on>2016-10-21 00:00:24</sys_created_on>
+            <sys_customer_update>true</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_id>889a615a0faa6a0034457d4ce1050e99</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>sp_angular_provider</sys_name>
+            <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+            <sys_update_name>sys_ui_list_sp_angular_provider_null</sys_update_name>
+            <sys_updated_by>peter.crivello@weather.com</sys_updated_by>
+            <sys_updated_on>2016-10-21 00:00:24</sys_updated_on>
+            <sys_user display_value="Peter Crivello">8a7f13ee0f4c0200f7cee388b1050e29</sys_user>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_list>
+    </sys_ui_list>
+</record_update>

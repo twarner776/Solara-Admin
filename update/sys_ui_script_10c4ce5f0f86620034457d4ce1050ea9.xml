@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.prv-entmt-ctrl</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .controller('ProvisionEntitlementCtrl', ProvisionEntitlementCtrl);
+
+    ProvisionEntitlementCtrl.$inject = ['$scope', '$window', 'EntitlementFactory', 'SearchService', 'PackageFactory', 'ManageAccountModalService', 'toastr'];
+
+    function ProvisionEntitlementCtrl($scope, $window, EntitlementFactory, SearchService, PackageFactory, ModalService, toastr) {
+		var ctrl = this; 
+		
+		this.searchPackage = searchPackage;
+		this.searchPlan = searchPlan;
+		this.searchAccount = searchAccount;
+		this.searchExternalContact = searchExternalContact;
+		this.searchInternalContact = searchInternalContact;
+		this.isAccountTypeOther = isAccountTypeOther;
+		this.isExternalContactDisables = isExternalContactDisables;
+		this.clearFields = clearFields;
+		this.createEntitlement = createEntitlement;
+		this.addToEndDateDays = addToEndDateDays;
+		this.openPackageServiceNowForm = openServiceNowForm;
+		this.openPlanServiceNowForm = openPlanServiceNowForm;
+		this.openAccountServiceNowForm = openServiceNowForm;
+		this.openContactServiceNowForm = openServiceNowForm;
+		this.isViewBtnDisables = isViewBtnDisables;
+		this.createPackage = createPackage;
+		this.createPlan = createPlan;
+		this.createAccount = createAccount;
+		this.createContact = createContact;
+
+		init();
+		
+		
+		function init() {
+			ctrl.accountTypes = {
+				WEATHER_COMPANY: {text: 'The Weather Company', value: 'WEATHER_COMPANY'},
+				OTHER: {text: 'Other', value: 'OTHER'}
+			};
+			
+			ctrl.datepickerOptions = {
+				showWeeks: false, 
+				minDate: new Date()
+			};
+			
+			ctrl.clearFields();
+		}
+		
+		function clearFields(fieldNames) {
+			var defaultFields = {
+				accountType: ctrl.accountTypes.OTHER,
+				endDate: moment().add(60, 'days').toDate()
+			};
+			
+			if (!fieldNames || !fieldNames.length) {
+				ctrl.fields = angular.extend({}, defaultFields);
+				return;
+			}
+			
+			fieldNames.forEach(function (name) {
+				ctrl.fields[name] = (defaultFields.hasOwnProperty(name)) ? defaultFields[name] : null;
+			});
+		}
+				
+		function createEntitlement() {
+			var params = {
+				pack: ctrl.fields.package,
+				plan: ctrl.fields.plan,
+				threshold: ctrl.fields.threshold,
+				is_send_to_customer: ctrl.fields.isSendToCustomer,
+				is_send_to_sales: ctrl.fields.isSendToSales,
+				account: ctrl.fields.account,
+				contact: ctrl.fields.contact,
+				project_name: ctrl.fields.projectName,
+				end_date: moment(ctrl.fields.endDate).format('YYYY-MM-DD')
+			};
+			
+			return EntitlementFactory.create(params).$promise.then(
+				function (response) {
+					toastr.success('Entitlement was successfully created');
+				},
+				function (response) {
+					toastr.error("Something went wrong and your entitlement couldn't be created");					
+				}
+			);
+		}
+		
+		function createPackage() {
+			ModalService.createPackage().then(function (data) {
+				ctrl.fields.package = data;
+			});
+		}
+
+		function createPlan() {
+			ModalService.createPlan().then(function (data) {
+				ctrl.fields.plan = data;
+			});
+		}
+		
+		function createAccount() {
+			ModalService.createAccount(false).then(function (data) {
+				ctrl.fields.account = data;				
+			});
+		}
+		
+		function createContact() {
+			ModalService.createContact(ctrl.fields.account.sys_id, true).then(function (data) {
+				ctrl.fields.contact = data;				
+			});
+			
+		}
+
+		function addToEndDateDays(days) {
+			ctrl.fields.endDate = moment().add(days, 'days').toDate();
+		}
+		
+		function searchPackage(name) {
+			return SearchService.searchPackage(name).then(function (response) {
+				return response.data.result;
+			});			
+		}
+		
+		function searchPlan(name) {
+			return SearchService.searchPlan(name).then(function (response) {
+				return response.data.result;
+			});			
+		}
+		
+		function searchAccount(name) {
+			return SearchService.searchAccount(name).then(function (response) {
+				return response.data.result;
+			});			
+		}
+
+		function searchExternalContact(value, account) {
+			return SearchService.searchContactByNameOrEmail(value, account.sys_id).then(function (response) {
+				return response.data.result;
+			});
+		}
+
+		function searchInternalContact(value) {
+			return SearchService.searchInternalUserByNameOrEmail(value).then(function (response) {
+				return response.data.result;
+			});
+		}
+
+		function openPlanServiceNowForm(entry) {
+			openServiceNowForm(entry, 'x_wec_solara_admin_plan');
+		}
+
+		function openServiceNowForm(entry, tableName) {
+			$window.open('/' + (entry.sys_class_name || tableName) + '.do?sys_id=' + entry.sys_id);
+		}
+		
+		function isViewBtnDisables(entry) {
+			return !entry;
+		}
+		
+		function isAccountTypeOther() {
+			return ctrl.fields.accountType === ctrl.accountTypes.OTHER;
+		}
+		
+		function isExternalContactDisables() {
+			return !ctrl.fields.account;
+		}
+    }
+})();
+
+]]></script>
+        <script_name>prv-entmt-ctrl</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-09-29 08:03:13</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>10c4ce5f0f86620034457d4ce1050ea9</sys_id>
+        <sys_mod_count>47</sys_mod_count>
+        <sys_name>x_wec_solara_admin.prv-entmt-ctrl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_10c4ce5f0f86620034457d4ce1050ea9</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-17 15:43:23</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

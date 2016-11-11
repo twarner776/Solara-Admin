@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.mng-acc-prnt-ctrl</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .controller('ManageAccountParentCtrl', ManageAccountParentCtrl);
+
+    ManageAccountParentCtrl.$inject = ['$scope', 'NgTableParams', 'AccountFactory', 'SearchService', 'ManageAccountModalService'];
+
+    function ManageAccountParentCtrl($scope, NgTableParams, AccountFactory, SearchService, ModalService) {
+		
+		var ctrl = this; 
+		
+		ctrl.searchBusinessUnit = searchBusinessUnit;
+		ctrl.createAccount = ModalService.createAccount;
+		ctrl.editAccount = ModalService.editAccount;
+		ctrl.createContact = ModalService.createContact;
+		ctrl.search = search;
+		ctrl.clear = clear;
+		
+		init();
+		
+		
+		function init() {			
+			ctrl.clear();
+		}
+		
+		function searchBusinessUnit (name) {
+            return SearchService.searchBusinessUnit(name).then(function(response) {
+                ctrl.businessUnits = response.result;
+            });
+		}
+
+		function clear() {
+			ctrl.filter = {};
+		}
+		
+		function search() {
+			if(!ctrl.table){
+				ctrl.table = initTable();				
+			} else {
+				ctrl.table.reload();
+			}
+		}
+		
+		function initTable() {
+			return new NgTableParams({
+				count: 25,
+				sorting: { number: "asc" }, 
+			}, {
+				counts: [25, 50, 100, 200],
+				getData: function(params) {
+					ctrl.loader = true;
+					
+					var filters = params.filter(),
+						filtersArr = [];
+
+					if(!!ctrl.filter.businessUnits && ctrl.filter.businessUnits.length > 0){						
+						filtersArr.push(ctrl.filter.businessUnits.map(function(item){return 'u_business_unit=' + item.label;}).join('^OR'));
+					}
+
+					if(!!ctrl.filter.name){
+						filtersArr.push('nameLIKE'+ ctrl.filter.name);
+					}
+					
+					filtersArr.push('account_parentISEMPTY');
+					
+
+					var sorting = Object.keys(params.sorting());
+					if(sorting.length > 0){
+						filtersArr.push('ORDERBY' + (params.sorting()[sorting[0]] === 'desc' ? 'DESC' : '') + sorting[0]);
+					}
+
+					return loadData();
+					
+					function loadData(){
+						return AccountFactory.list({
+							sysparm_limit: params.count(),
+							sysparm_offset: (params.page() - 1) * params.count(),
+							sysparm_query: filtersArr.join('^'),
+							sysparm_display_value: 'all',
+							sysparm_suppress_pagination_header: true
+						}).$promise.then(function(res) {
+							ctrl.loader = false;
+							params.total(res.headers['x-total-count']);
+							return res.data.result;
+						});
+						
+					}
+				}
+			});
+			
+		}
+				
+    }
+})();
+
+]]></script>
+        <script_name>mng-acc-prnt-ctrl</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-09-22 15:07:58</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>2ae323410f8eee006c3005cce1050ecb</sys_id>
+        <sys_mod_count>15</sys_mod_count>
+        <sys_name>x_wec_solara_admin.mng-acc-prnt-ctrl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_2ae323410f8eee006c3005cce1050ecb</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-10 11:45:44</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

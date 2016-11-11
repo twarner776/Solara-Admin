@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>true</direct>
+        <endpoint>x_wec_solara_admin_team-team-list-tpl.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+	<h3>Manage BizDev teams and members</h3>
+	
+	<div>
+
+		<a ui-sref="team-list.new-team"
+		   class="btn btn-sm btn-primary">Create Team</a>
+
+		
+		<div style="width: 100%; display:inline-flex; margin-top: 10px; ">		
+			<div>
+				<table class="table table-striped table-hover" style="width: 350px;">
+					<thead>
+						<tr>
+							<th>Team Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="" ng-repeat="item in ctrl.teams" style="height: 34px; cursor: pointer;">
+							<td class="team-list__row"
+								ng-click="ctrl.openTeamInfo(item.sys_id.value)"
+								ng-class="{'active-team': ctrl.isTeamOpened(item.sys_id.value)}">
+								<span class="link">{{ item.u_team_name.display_value }}</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div style="margin-left: 30px; border-left: 2px solid #eee">
+				<div ui-view=""></div>
+			</div>
+		</div>
+	</div>
+	
+</j:jelly>]]></html>
+        <name>team-team-list-tpl</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-19 10:57:53</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>96cd25710f6a2a0034457d4ce1050e1a</sys_id>
+        <sys_mod_count>40</sys_mod_count>
+        <sys_name>team-team-list-tpl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_page_96cd25710f6a2a0034457d4ce1050e1a</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-09 11:17:31</sys_updated_on>
+    </sys_ui_page>
+</record_update>

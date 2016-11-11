@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.mng-entmt-ctrl</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .controller('ManageEntitlementCtrl', ManageEntitlementCtrl);
+
+    ManageEntitlementCtrl.$inject = ['$scope', '$uibModal', '$timeout', '$q', '$element', 'NgTableParams', 'AccountAuthenticationFactory', 'ReferenceBookFactory', 'EntitlementFactory', 'toastr', 'ngTableEventsChannel'];
+
+    function ManageEntitlementCtrl($scope, $uibModal, $timeout, $q, $element, NgTableParams, AccountAuthenticationFactory, ReferenceBookFactory, EntitlementFactory, toastr, ngTableEventsChannel) {
+		
+		var ctrl = this; 
+
+		ctrl.searchCustomerAccount = searchCustomerAccount;
+		ctrl.searchBusinessUnit = searchBusinessUnit;
+		ctrl.searchProduct = searchProduct;
+		ctrl.clear = clear;
+		ctrl.search = search;
+		ctrl.activate = activate;
+		ctrl.isShowsRenewButton = isShowsRenewButton;
+		ctrl.isStatusActive = isStatusActive;
+		
+		init();
+		
+		
+		function init() {
+			ctrl.checkboxes = {
+				checked: false,
+				items: {},
+				getCheckedItems: function(){
+					var result = [];
+					_.forIn(this.items, function(value, key) {
+						if(value && ctrl.table){
+							var s = {};
+							s['sys_id'] = {value: key};
+							result.push(_.find(ctrl.table.data, s));
+						}
+					});
+
+					return result;
+				}			
+			};
+
+			ctrl.expireArray = [
+				{label: '1 week', expireDate: moment().add(7, 'days').format('YYYY-MM-DD')},
+				{label: '2 weeks', expireDate: moment().add(14, 'days').format('YYYY-MM-DD')},
+				{label: '3 weeks', expireDate: moment().add(21, 'days').format('YYYY-MM-DD')},
+				{label: '4 weeks', expireDate: moment().add(28, 'days').format('YYYY-MM-DD')}
+			];
+			
+			$q.all([loadStatuses(), loadDefaultProduct()]).then(function () {
+				clear();
+			});
+			
+		}
+				
+		function searchCustomerAccount (name) {
+            return AccountAuthenticationFactory.customerAccount({sysparm_query: 'name!=""^ORDERBYname^nameLIKE' + name, sysparm_limit: 20, preloader: false}).$promise.then(function(res){
+                ctrl.customerAccounts = res.result;
+				
+				return res;
+            });
+		}
+
+		function searchBusinessUnit (name) {
+            return ReferenceBookFactory.sysСhoice({sysparm_query: 'name=customer_account^valueLIKE' + name + '^element=u_business_unit', sysparm_limit: 20, preloader: false}).$promise.then(function(res){
+                ctrl.businessUnits = res.result;
+				
+				return res;
+            });
+		}
+		
+		function searchProduct (name) {
+            return AccountAuthenticationFactory.product({sysparm_query: 'ORDERBYdisplay_name^display_nameLIKE' + name, sysparm_limit: 20, preloader: false}).$promise.then(function(res) {
+                ctrl.products = res.result;
+				
+				return res;
+            });
+		}
+		
+		function loadDefaultProduct() {
+			return searchProduct('Solara Developer API');
+		}
+			
+		function loadStatuses() {
+			return EntitlementFactory.statusChoice().$promise.then(function (response) {
+				ctrl.statuses = response.result;
+				
+				ctrl.renewalStatus = response.result.filter(function (value) {
+					return value.value === 'Renewal';
+				})[0];
+				
+				ctrl.activeStatus = response.result.filter(function (value) {
+					return value.value === 'Active';
+				})[0];
+				
+				return response;
+			});
+		}
+
+		function clear() {
+			ctrl.filter = {
+				products: ctrl.products,
+				status: ctrl.renewalStatus
+			};
+		}
+
+		function search() {
+			if(!ctrl.table){
+				ctrl.table = initTable();
+				
+				ngTableEventsChannel.onAfterReloadData(function() {
+					
+					$timeout(function () {
+						ctrl.checkboxes.items = {};
+						angular.forEach(ctrl.table.data, function(item) {
+							ctrl.checkboxes.items[item['sys_id'].value] = true;
+						});
+					}, 0);
+										
+				}, $scope, ctrl.table);
+				
+				initCheckBox();
+			} else {
+				ctrl.table.reload();
+			}
+		}
+		
+		function initTable() {
+			return new NgTableParams({
+				count: 25,
+				sorting: { u_number: "asc" }, 
+			}, {
+				counts: [25, 50, 100, 200],
+				getData: function(params) {
+					ctrl.loader = true;
+					
+					var filters = params.filter(),
+						filtersArr = [];
+
+					if(ctrl.filter.businessUnits && ctrl.filter.businessUnits.length > 0){						
+						filtersArr.push(ctrl.filter.businessUnits.map(function(item){return 'u_business_unit=' + item.label;}).join('^OR'));
+					}
+
+					if(ctrl.filter.products && ctrl.filter.products.length > 0){
+						filtersArr.push(ctrl.filter.products.map(function(item){return 'product=' + item.sys_id;}).join('^OR'));
+					}
+					
+					if(ctrl.filter.customerAccounts && ctrl.filter.customerAccounts.length > 0){	
+						filtersArr.push(ctrl.filter.customerAccounts.map(function(item){return 'account=' + item.sys_id;}).join('^OR'));
+					}
+					
+					if(!!ctrl.filter.contact){
+						filtersArr.push('u_entitled_user.emailLIKE'+ ctrl.filter.contact + '^OR' + 'u_entitled_user.nameLIKE' + ctrl.filter.contact);
+					}
+
+					if(!!ctrl.filter.apiKey){
+						filtersArr.push('u_solara_api_key=' + ctrl.filter.apiKey);
+					}
+
+					filtersArr.push('u_entitlement_status=' + ctrl.filter.status.value);
+					
+					if (!!ctrl.filter.expire) {
+						filtersArr.push('end_date<=' + ctrl.filter.expire.expireDate);
+					}
+					
+					var sorting = Object.keys(params.sorting());
+					if(sorting.length > 0){
+						filtersArr.push('ORDERBY' + (params.sorting()[sorting[0]] === 'desc' ? 'DESC' : '') + sorting[0]);
+					}
+
+					return loadData();
+					
+					function loadData(){
+						return EntitlementFactory.list({
+							sysparm_limit: params.count(),
+							sysparm_offset: (params.page() - 1) * params.count(),
+							sysparm_query: filtersArr.join('^'),
+							sysparm_display_value: 'all',
+							sysparm_suppress_pagination_header: true
+						}).$promise.then(function(res) {
+							ctrl.loader = false;
+							params.total(res.headers['x-total-count']);
+							return res.data.result;
+						});
+						
+					}
+				}
+			});
+			
+		}
+
+		function initCheckBox() {
+			$scope.$watch(function() {
+			  return ctrl.checkboxes.checked;
+			}, function(value) {
+				angular.forEach(ctrl.table.data, function(item) {
+					ctrl.checkboxes.items[item['sys_id'].value] = value;
+				});
+			});
+			
+			
+			$scope.$watch(function() {
+			  return ctrl.checkboxes.items;
+			}, function(values) {
+			  var checked = 0, unchecked = 0,
+				  total = ctrl.table.data.length;
+			  angular.forEach(ctrl.table.data, function(item) {
+				checked   +=  (ctrl.checkboxes.items[item['sys_id'].value]) || 0;
+				unchecked += (!ctrl.checkboxes.items[item['sys_id'].value]) || 0;
+			  });
+			  if ((unchecked == 0) || (checked == 0)) {
+				ctrl.checkboxes.checked = (checked == total);
+			  }
+			  // grayed checkbox
+			  angular.element($element[0].getElementsByClassName("select-all")).prop("indeterminate", (checked != 0 && unchecked != 0));
+			}, true);			
+			
+		}		
+
+		function isShowsRenewButton() {
+			if (angular.isUndefined(ctrl.table) || !ctrl.table.data.length) {
+				return false;
+			}
+			
+			var statusValue = ctrl.table.data[0].u_entitlement_status.value;
+			
+			return statusValue === ctrl.renewalStatus.value ||
+					statusValue === ctrl.activeStatus.value;
+		}
+		
+		function isStatusActive() {
+			return angular.isDefined(ctrl.filter) && ctrl.filter.status === ctrl.activeStatus;
+		} 
+		
+		function activate() {
+			var modalInstance = $uibModal.open({
+				templateUrl: '/x_wec_solara_admin_mng-entmt-mdl-tpl.do',
+				controller: modalController,
+				controllerAs: "m"
+			});
+			
+			modalInstance.result.then(function (data) {	
+				data.sys_ids = ctrl.checkboxes.getCheckedItems().map(function (value) {
+					return value.sys_id.value;
+				});
+								
+				EntitlementFactory.renew(data).$promise.then(
+					function (response) {
+						toastr.success('Entitlements updated');
+						ctrl.table.reload();					
+					},
+					function (response) {
+						toastr.error("Entitlements hasn't been updated");
+					});			  
+			});				
+		}
+		
+		function modalController ($uibModalInstance) {
+			var m = this;
+
+			m.ok = ok;
+			m.cancel = cancel;
+			
+			m.initField = initField;
+
+			m.datepickerOptions = {
+				showWeeks: false, 
+				minDate: new Date()
+			};
+			
+			m.dateTypes = {
+				END_DATE: {
+					label: 'Set End Date to',
+					value: 'END_DATE'
+				},
+				COUNT_DAYS: {
+					label: 'Extend Entitlement End Date by',
+					value: 'COUNT_DAYS'
+				}
+			};
+
+			m.countDaysArray = [
+				{label: '30 days', value: 30}, 
+				{label: '60 days', value: 60},
+				{label: '90 days', value: 90}
+			];
+			
+			function initField() {
+				m.endDate = new Date();
+				m.countDays = m.countDaysArray[0];
+			}
+			
+			function ok(dateType) {
+				var result = {};
+
+				if (dateType === m.dateTypes.END_DATE) {
+					result.end_date = moment(m.endDate).format('YYYY-MM-DD');
+				} else {
+					result.count_days = m.countDays.value;
+				} 
+
+				$uibModalInstance.close(result);
+			}
+
+			function cancel() {
+				$uibModalInstance.dismiss('cancel');
+			}
+
+		}
+				
+    }
+})();
+
+]]></script>
+        <script_name>mng-entmt-ctrl</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-09-15 09:48:37</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>57279ef20ff12e006c3005cce1050eb2</sys_id>
+        <sys_mod_count>80</sys_mod_count>
+        <sys_name>x_wec_solara_admin.mng-entmt-ctrl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_57279ef20ff12e006c3005cce1050eb2</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-04 12:56:55</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

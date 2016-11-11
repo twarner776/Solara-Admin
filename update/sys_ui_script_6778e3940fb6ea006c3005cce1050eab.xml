@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.team.team-info-ctrl</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+		.controller('TeamInfoCtrl', TeamInfoCtrl);
+	
+	TeamInfoCtrl.$inject = ['$scope', '$rootScope', '$state', '$stateParams', '$q', 'BizDevTeamFactory', 'ContactFactory', 'UserFactory', 'ModalService', 'SearchService', 'toastr'];
+	
+	function TeamInfoCtrl ($scope, $rootScope, $state, $stateParams, $q, BizDevTeamFactory, ContactFactory, UserFactory, ModalService, SearchService, toastr) {
+		var ctrl = this;
+		
+		ctrl.openTeamRoles = openTeamRoles;
+		ctrl.selectContacts = selectContacts;
+		ctrl.unselectContacts = unselectContacts;
+		ctrl.filterSelectableContacts = filterSelectableContacts;
+		ctrl.createContact = createContact;
+		ctrl.isShouldBeFocused = isShouldBeFocused;
+		ctrl.isContactsNonSelected = isContactsNonSelected;
+		ctrl.isNewTeamOpened = isNewTeamOpened;
+		ctrl.submit = submit;
+				
+		init();
+		
+		
+		function init() {
+			ctrl.sysId = $stateParams.sysId;
+			ctrl.selectableContacts = [];
+			
+			ctrl.fields = {};
+
+			loadTeam(ctrl.sysId).then(function (response) {
+				clear();
+				
+				return response;
+			}).then(function (response) {
+				return loadAccountByName('IBM');
+			});
+		}
+		
+		function clear() {
+			if (!ctrl.team) {
+				ctrl.fields = {
+					name: 'New BizDev Team',
+					contacts: []
+				};
+				
+				return;
+			}
+
+			ctrl.fields = {
+				name: ctrl.team.u_team_name.value,
+				contacts: convertResponseTeamMembers(ctrl.team.u_team_members)
+			};
+		}
+		
+		function convertResponseTeamMembers(teamMembers) {
+			var result = [];
+			
+			if (!teamMembers) {
+				return result;
+			}
+			
+			var sysIds = stringToArray(teamMembers.value);
+			var names = stringToArray(teamMembers.display_value);
+			
+			sysIds.forEach(function (value, index) {
+				result.push({
+					sys_id: sysIds[index],
+					name: names[index]
+				});
+			});
+			
+			return result;
+		}
+		
+		function loadTeam(sysId) {
+			if (!sysId) {
+				return $q.resolve();
+			}
+			
+			var params = {
+				sys_id: sysId,
+				sysparm_display_value: 'all'
+			};
+			
+			return BizDevTeamFactory.get(params).$promise.then(function (response) {
+				ctrl.team = response.result;
+				
+				return response;
+			});
+		}
+		
+		function loadAccountByName(name) {
+			return SearchService.searchAccount(name, true).then(function (response) {
+				ctrl.account = response.data.result[0];
+			});
+		}
+		
+		function loadContactsByName(name) {
+			var params = {
+				sysparm_limit: 30,
+				//sysparm_display_value: 'all'
+			};
+			
+			if (!!name) {
+				params.sysparm_query = 'nameLIKE' + name;
+			}
+			
+			return UserFactory.list(params).$promise.then(function (response) {
+				ctrl.selectableContacts = response.data.result;
+
+				return response;
+			});
+		}
+
+		function selectContacts(contacts) {
+			ctrl.fields.contacts = ctrl.fields.contacts.concat(contacts);
+			ctrl.selectableContacts = ctrl.selectableContacts.filter(function (contact) {
+				return !contacts.some(function (value) { return contact.sys_id === value.sys_id; });
+			});
+		}
+		
+		function unselectContacts(contacts) {
+			ctrl.selectableContacts = ctrl.selectableContacts.concat(contacts);
+			
+			ctrl.fields.contacts = ctrl.fields.contacts.filter(function (contact) {
+				return !contacts.some(function (value) { return contact.sys_id === value.sys_id; });
+			});			
+		}
+		
+		function filterSelectableContacts(name) {
+			loadContactsByName(name).then(function () {
+				ctrl.fields.contacts.forEach(function (contact) {
+					var index = ctrl.selectableContacts.findIndex(function (value) {
+						return contact.sys_id === value.sys_id;
+					});
+					
+					(index !== -1) && ctrl.selectableContacts.splice(index, 1);
+				});							
+			});			
+		}
+		
+		function createContact(accountSysId, isAccountReadonly) {
+			ModalService.createContact(accountSysId, isAccountReadonly).then(function (data) {
+				selectContacts([data]);
+			});
+		}
+		
+		function submit() {
+			var teamMembers = arrayToString(
+				ctrl.fields.contacts.map(function (value) {
+					return value.sys_id;
+				})
+			);
+			
+			var params = {
+				u_team_name: ctrl.fields.name,
+				u_team_members: teamMembers
+			}; 
+	
+			var promise;
+			
+			if (!!ctrl.team) {
+				var headParams = {
+					sys_id: ctrl.team.sys_id.value
+				};
+				
+				promise = updateTeam(headParams, params);
+			} else {
+				promise = createTeam(params);
+			}
+			
+			return promise.then(function (response) {
+				return loadTeam(response.result.sys_id);
+			}).then(function (response) {
+				$rootScope.$broadcast('team.update-list');
+				$state.go('team-list.team-info', { sysId: response.result.sys_id.value });
+			});
+		}
+		
+		function updateTeam(headParams, params) {
+			return BizDevTeamFactory.update(headParams, params).$promise.then(
+				function (response) {
+					toastr.success('Team was successfully updated');					
+					return response;
+				},
+				function (response) {
+					toastr.error("Team wasn't updated");					
+					return response;
+				});
+		}
+
+		function createTeam(params) {
+			return BizDevTeamFactory.create(params).$promise.then(
+				function (response) {
+					toastr.success('Team was successfully created');					
+					return response;
+				},
+				function (response) {
+					toastr.error("Team wasn't created");					
+					return response;
+				});
+		}
+
+		function isShouldBeFocused() {
+			return !ctrl.sysId;
+		}
+		
+		function isContactsNonSelected() {
+			return !ctrl.fields.contacts || !ctrl.fields.contacts.length;
+		}
+		
+		function stringToArray(value) {
+			var result = [];
+			
+			if (!value) {
+				return result;
+			}
+			
+			result = value.split(',').map(function (value) {
+				return value.trim();
+			});
+			
+			return result;
+		}
+
+		function arrayToString(value) {
+			return !!value ? value.join(',') : '';
+		}
+
+		function openTeamRoles() {
+			$state.go('team-list.roles', {sysId: ctrl.sysId});			
+		}
+		
+		function isNewTeamOpened(teamSysId) {
+			return $state.is('team-list.new-team');
+		}
+	}
+	
+})();
+
+]]></script>
+        <script_name>team.team-info-ctrl</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-27 14:21:37</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>6778e3940fb6ea006c3005cce1050eab</sys_id>
+        <sys_mod_count>61</sys_mod_count>
+        <sys_name>x_wec_solara_admin.team.team-info-ctrl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_6778e3940fb6ea006c3005cce1050eab</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-09 11:20:01</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ws_operation">
+    <sys_ws_operation action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl/>
+        <http_method>POST</http_method>
+        <name>Create entitlement</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+	var params = request.body.data;
+
+	var pack = params.pack,
+		planId = params.plan.u_solara_plan_id,
+		threshold = params.threshold,
+		isSendToCustomer = params.is_send_to_customer,
+		isSendToSales = params.is_send_to_sales,
+		account = (!params.account) ? getWeatherAccount() : getAccount(params.account.sys_id),
+		contact = params.contact,
+		projectName = params.project_name,
+		startDate = new Date().toJSON().slice(0, 10),
+		endDate = params.end_date;
+	
+	try {				
+		// =========================================================================================================
+		// Step: Create entitlement
+		var record = new GlideRecord('service_entitlement');
+		record.initialize();
+
+		//var solaraContactRef = accountType + ' ' + (internalDepartment || account.name) + ' ' + projectName;
+		//solaraContactRef = solaraContactRef.replace(/ /g, '_');
+
+		//record.u_solara_contact_ref = solaraContactRef;
+		record.u_entitled_user = contact.sys_id;
+		record.user_name = contact.email;
+		record.u_business_unit = 'Weather API';
+		record.u_data_source = 'Solara';
+
+		record.product = pack.sys_id;
+		record.account = account.sys_id;
+		record.u_product_name = projectName;
+		record.u_escalation_threshold = threshold;
+		record.u_send_notification_to_customer = isSendToCustomer;
+		record.u_send_notification_to_sales_am = isSendToSales;
+		record.start_date = startDate;
+		record.end_date = endDate;
+
+		if (!record.insert()) {
+			throw('Entitlement was not created for: ' + contact.email);
+		}
+		
+
+		// =========================================================================================================
+		// Step: Load the plan in order to fetch entitlement limit		
+		var plan = loadPlan(planId);
+		var planData = JSON.parse(plan.planData);
+		var planMax = planData.maxTPM + ' calls per minute or ' + planData.maxTPD + ' calls per day';			
+
+
+		// =========================================================================================================
+		// Step: Create API key in Solara via API call
+		var apiKey = createApiKey(record.getValue('sys_id'), pack.u_solara_package_id, planId);
+
+
+		// =========================================================================================================
+		// Step: Update service_entitlement record with API credentials information
+		record.u_entitled_limit = planMax;
+		record.u_solara_api_key = apiKey.apiKey;
+		record.u_solara_client_id = apiKey.accountId;
+		record.u_entitlement_status = 'Active';
+		
+		record.update();
+
+		sendEmailNotification(contact.email, apiKey.apiKey, account.getValue('name'));
+	} catch(err) {
+		throw("Couldn't create entitlement: " + err);
+	}
+		
+ 
+	function loadPlan(planId) {
+		var request = new sn_ws.RESTMessageV2('Solara Admin Console - Solara Plan API', 'get');
+		request.setStringParameter("planId", planId);
+
+		var response = request.execute();
+
+		if (response.haveError()) {
+			throw("Error calling solara API to get plan ID: " + planId + " Solara plan response: " + response.getBody());
+		}
+
+		return JSON.parse(response.getBody());
+	}
+
+	function createApiKey(entitlementSysId, packageId, planId) {
+		var params = {
+			accountName: entitlementSysId,
+			packageId: packageId,
+			planId: planId
+		};
+		
+		var request = new sn_ws.RESTMessageV2('Solara Admin Console - Solara API', 'post');
+		request.setRequestBody(JSON.stringify(params));
+		
+		//request.setRequestBody('{"accountName": "' + entitlementSysId + '", "packageId": "' + packageId + '", "planId": "' + planId + '"}');
+		
+		var response = request.execute();
+		
+		if (response.haveError()) {
+			throw("Error found: " + response.getErrorMessage() + " calling solara API to get API key: " + entitlementSysId + "/" + packageId + "/" + planId + '. ' + response.getBody());
+		}
+
+		return JSON.parse(response.getBody());
+	}
+	
+	function getWeatherAccount() {
+		var accountRecord = new GlideRecord('customer_account');
+
+		accountRecord.addQuery('name', 'The Weather Company');			
+		accountRecord.query();
+			
+		if (!accountRecord.next()) {
+			throw("Couldn't find 'The Weather Company' account");
+		}
+			
+		return accountRecord;
+	}
+
+	function getAccount(sysId) {
+		var accountRecord = new GlideRecord('customer_account');
+
+		if (!accountRecord.get(sysId)) {
+			throw("Couldn't find an account with sys_id: " +  sysId);
+		}
+			
+		return accountRecord;
+	}
+ 			
+	function sendEmailNotification(email, apiKey, companyName) {		
+		var encodedData = new global.JSON().encode({
+			email: email,
+			apiKey: apiKey,
+			companyName: companyName
+		});
+		
+		gs.eventQueue('x_wec_solara_admin.key.created', null, [email], encodedData);
+	}
+	
+})(request, response);]]></operation_script>
+        <operation_uri>/api/x_wec_solara_admin/entitlement</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/</relative_path>
+        <request_example/>
+        <requires_acl_authorization>false</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-09-29 15:24:15</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>a9ea23130f0e620034457d4ce1050e70</sys_id>
+        <sys_mod_count>35</sys_mod_count>
+        <sys_name>Create entitlement</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ws_operation_a9ea23130f0e620034457d4ce1050e70</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-31 08:27:13</sys_updated_on>
+        <web_service_definition display_value="Entitlement API">64d910d30fbd2e006c3005cce1050ed0</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+</record_update>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ws_operation">
+    <sys_ws_operation action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl/>
+        <http_method>POST</http_method>
+        <name>Create Plan</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+	var params = {
+		name: request.body.data.name,
+		solaraId: request.body.data.solara_id,
+		solaraPlanId: request.body.data.solara_plan_id,
+		solaraClientId: request.body.data.solara_client_id,
+		tpd: request.body.data.tpd,
+		bizDevTeams: request.body.data.biz_dev_teams,
+	};
+	
+	var record = new GlideRecord('x_wec_solara_admin_plan');
+	record.initialize();
+	
+	record.name = params.name;
+	record.u_solara_id = params.solaraId;
+	record.u_solara_plan_id = params.solaraPlanId;
+	record.solara_client_id = params.solaraClientId;
+	record.u_tpd = params.tpd;
+	record.u_biz_dev_team = (!!params.bizDevTeams) ? params.bizDevTeams.join(',') : params.bizDevTeams;
+		
+	record.insert();
+	
+	return {
+		sys_id: record.getValue('sys_id')
+	};
+	
+})(request, response);]]></operation_script>
+        <operation_uri>/api/x_wec_solara_admin/plan</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/</relative_path>
+        <request_example/>
+        <requires_acl_authorization>false</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-13 11:00:10</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>793472f70f52260034457d4ce1050e14</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>Create Plan</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ws_operation_793472f70f52260034457d4ce1050e14</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-24 11:56:49</sys_updated_on>
+        <web_service_definition display_value="Plan API">20f3beb70f52260034457d4ce1050e59</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+</record_update>

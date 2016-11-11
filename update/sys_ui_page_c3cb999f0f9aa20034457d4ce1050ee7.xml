@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>true</direct>
+        <endpoint>x_wec_solara_admin_prv-ent-pkg-mdl-tpl.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	
+	<form name="ctrl.packageForm" class="form-horizontal modal-form" novalidate="novalidate">
+		<div class="modal-header">
+			<h3 class="modal-title">Create Package</h3>
+		</div>
+
+		<div class="modal-body">
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label control-label-required">Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="name" name="name" required="required"
+						   ng-model="ctrl.fields.name" />
+					
+					<div ng-messages="ctrl.packageForm.name.$error" ng-if="!ctrl.packageForm.name.$pristine">
+						<div ng-message="required" class="error-message">required field</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="solaraPackageId" class="col-sm-3 control-label control-label-required">Solara Package ID</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="solaraPackageId" name="solaraPackageId" required="required"
+						   ng-model="ctrl.fields.solaraPackageId"/>
+					
+					<div ng-messages="ctrl.packageForm.solaraPackageId.$error" ng-if="!ctrl.packageForm.solaraPackageId.$pristine">
+						<div ng-message="required" class="error-message">required field</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="shortDescription" class="col-sm-3 control-label">Short Description</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="shortDescription" name="shortDescription"
+						   ng-model="ctrl.fields.shortDescription"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="businessUnit" class="col-sm-3 control-label">Business Unit</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="businessUnit" name="businessUnit" readonly="readonly"
+						   ng-model="ctrl.fields.businessUnit.name"/>
+<!--
+					<select class="form-control" id="businessUnit"
+							ng-model="ctrl.fields.businessUnit"
+							ng-options="item as item.label for item in ctrl.businessUnits">
+					</select>
+-->
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="dataSource" class="col-sm-3 control-label">Data Source</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="dataSource" name="dataSource" readonly="readonly"
+						   ng-model="ctrl.fields.dataSource.name"/>
+<!--					
+					<select class="form-control" id="dataSource"
+							ng-model="ctrl.fields.dataSource"
+							ng-options="item as item.label for item in ctrl.dataSources">
+					</select>
+-->
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-sm-offset-3 col-sm-9">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox"
+								   ng-model="ctrl.fields.businessDevelopment" 
+								   ng-change="ctrl.clearBizDevTeams()"/>
+							<span>Business Development package</span>
+						</label>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group"
+				 ng-if="ctrl.isShowsBizDevTeams()">
+				<label class="col-sm-3 control-label">Teams</label>
+				<div class="col-sm-9">
+
+					<ui-select class="form-control"
+							   ng-model="ctrl.fields.bizDevTeams" 
+							   theme="bootstrap" 
+							   multiple="true" close-on-select="false">
+						<ui-select-match placeholder="Type to add a new team...">{{$item.u_team_name}}</ui-select-match>
+						<ui-select-choices repeat="bu in ctrl.bizDevTeams"
+										   refresh="ctrl.searchBizDevTeam($select.search)"
+										   refresh-delay="30">
+							<div ng-bind-html="bu.u_team_name | highlight: $select.search"></div>
+						</ui-select-choices>
+
+					</ui-select>				  
+				</div>
+			</div>
+
+			<hr />
+
+			<div class="extendable-package-container">
+				<label for="extendablePackage" class="control-label search-control-label">
+					Search and use pre-canned packages to build a new one
+				</label>
+				
+				<input type="text" class="form-control" id="extendablePackage" name="extendablePackage"
+					   placeholder="Type package name in order to select it's endpoints ..."
+					   ng-model="ctrl.fields.package"
+					   uib-typeahead="item as item.display_name for item in ctrl.searchPackage($viewValue)"
+					   typeahead-on-select="ctrl.extendPackageByChilds($model.sys_id)"
+					   typeahead-show-hint="true"
+					   typeahead-min-length="0"
+					   typeahead-select-on-exact="true"
+					   typeahead-wait-ms="200"
+					   typeahead-editable="false"/>					
+			</div>
+			
+			<div class="row">				
+				<div class="package-child">
+					<div class="package-child-list-container">
+						<select class="form-control" multiple="multiple"
+								ng-model="ctrl.selectableChildsModel"
+								ng-options="item as item.name for item in ctrl.selectableChilds | orderBy: 'name'"
+								ng-change="ctrl.fillSelectableChildDetails()">
+						</select>
+					</div>
+					
+					<div class="package-child-btn-container">
+						<button class="btn btn-default btn-sm package-child-btn"
+								ng-disabled="!ctrl.selectableChildsModel.length"
+								ng-click="ctrl.selectChilds(ctrl.selectableChildsModel)">
+							<i aria-hidden="true" class="fa fa-chevron-right"></i>
+						</button>
+						<button class="btn btn-default btn-sm package-child-btn"
+								ng-disabled="!ctrl.selectedChildsModel.length"
+								ng-click="ctrl.unselectChilds(ctrl.selectedChildsModel)">
+							<i aria-hidden="true" class="fa fa-chevron-left"></i>
+						</button>
+					</div>
+					
+					<div class="package-child-list-container">
+						<select class="form-control" name="packageChilds" multiple="multiple"
+								ng-model="ctrl.selectedChildsModel"
+								ng-options="item as item.name for item in ctrl.fields.childs">
+						</select>
+					</div>
+				</div>				
+			</div>
+			
+			<div class="child-details-container" ng-if="ctrl.isShowsSelectableChildDetails()">
+				<div ng-if="ctrl.selectableChildDetails.shortDescription.isShows">
+					<span class="child-details-label">Short Description:</span>
+					<span ng-bind="ctrl.selectableChildDetails.shortDescription.value" />
+				</div>
+				<div ng-if="ctrl.selectableChildDetails.apiSpec.isShows">
+					<span class="child-details-label">API Specification:</span>
+					<a class="link" target="_blank"
+					   ng-href="{{ ctrl.selectableChildDetails.apiSpec.value }}" 
+					   ng-bind="ctrl.selectableChildDetails.apiSpec.value" />
+				</div>
+				<div ng-if="ctrl.selectableChildDetails.supportedBy.isShows">
+					<span class="child-details-label">Supported by:</span>
+					<span ng-bind="ctrl.selectableChildDetails.supportedBy.value" />
+				</div>
+			</div>
+		</div>
+
+		
+		<div class="modal-footer">
+			<button class="btn btn-default btn-sm" type="button" ng-click="ctrl.cancel()">Cancel</button>
+			<button class="btn btn-primary btn-sm" type="button"
+					ng-disabled="ctrl.packageForm.$invalid ||  ctrl.packageForm.$pristine || ctrl.packageForm.$pending"
+					ng-click="ctrl.ok()">Ok</button>
+		</div>
+	</form>
+
+</j:jelly>]]></html>
+        <name>prv-ent-pkg-mdl-tpl</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-11 15:14:59</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>c3cb999f0f9aa20034457d4ce1050ee7</sys_id>
+        <sys_mod_count>45</sys_mod_count>
+        <sys_name>prv-ent-pkg-mdl-tpl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_page_c3cb999f0f9aa20034457d4ce1050ee7</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-10 09:09:34</sys_updated_on>
+    </sys_ui_page>
+</record_update>

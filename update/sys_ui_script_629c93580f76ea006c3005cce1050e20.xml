@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.team.resource-fact</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .factory('EntitlementFactory', EntitlementFactory)
+		.factory('AccountFactory', AccountFactory)
+		.factory('ContactFactory', ContactFactory)
+		.factory('ContactEntitlementFactory', ContactEntitlementFactory)
+		.factory('ContactSearchFactory', ContactSearchFactory)
+		.factory('PackageFactory', PackageFactory)
+		.factory('PlanFactory', PlanFactory)
+		.factory('UserFactory', UserFactory)
+		.factory('BusinessUnitFactory', BusinessUnitFactory)
+		.factory('DataSourceFactory', DataSourceFactory)
+		.factory('BizDevTeamFactory', BizDevTeamFactory)
+		.factory('SysUserRoleFactory', SysUserRoleFactory)
+		.factory('SysUserHasRoleFactory', SysUserHasRoleFactory);
+	
+
+    EntitlementFactory.$inject = ['$resource'];
+
+    function EntitlementFactory($resource) {
+		return $resource('', {}, {
+			list: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/service_entitlement',
+				transformResponse: listTransformResponse
+			},
+			renew: {
+				method: 'POST', 
+				url: '/api/x_wec_solara_admin/entitlement/renew'
+			},
+			create: {
+				method: 'POST', 
+				url: '/api/x_wec_solara_admin/entitlement'
+			},
+			statusChoice: {
+				method: 'GET',
+				url: '/api/x_wec_product/table/service_entitlement/choice/u_entitlement_status'
+			}
+		});
+    }
+	
+
+	AccountFactory.$inject = ['$resource'];
+
+    function AccountFactory($resource) {
+		return $resource('', {}, {
+			list: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/customer_account',
+				transformResponse: listTransformResponse
+			},
+			get: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/customer_account/:sys_id'
+			},
+			create: {
+				method: 'POST',
+				url: '/api/x_wec_product/table/customer_account'
+			},
+			update: {
+				method: 'PATCH', 
+				url: '/api/x_wec_product/table/customer_account/:sys_id'
+			},
+			businessUnitChoice: {
+				method: 'GET',
+				url: '/api/x_wec_product/table/customer_account/choice/u_business_unit'
+			},
+			dataSourceChoice: {
+				method: 'GET',
+				url: '/api/x_wec_product/table/customer_account/choice/u_data_source'
+			}
+		});
+    }
+	
+	
+	ContactFactory.$inject = ['$resource'];
+
+    function ContactFactory($resource) {
+		return $resource('', {}, {
+			list: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/customer_contact',
+				transformResponse: listTransformResponse
+			},
+			get: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/customer_contact/:sys_id'
+			},
+			create: {
+				method: 'POST',
+				url: '/api/x_wec_product/table/customer_contact'
+			},
+			update: {
+				method: 'PATCH', 
+				url: '/api/x_wec_product/table/customer_contact/:sys_id'
+			},
+			clientClassificationChoice: {
+				method: 'GET',
+				url: '/api/x_wec_product/table/customer_contact/choice/u_client_class'								
+			},
+			registrationChoice: {
+				method: 'GET',
+				url: '/api/x_wec_product/table/customer_contact/choice/u_registration'				
+			},
+			timeZoneChoice: {
+				method: 'GET',
+				url: '/api/x_wec_product/table/customer_contact/choice/time_zone'				
+			},
+			businessUnitChoice: {
+				method: 'GET',
+				url: '/api/x_wec_product/table/customer_contact/choice/u_business_unit'
+			},
+			dataSourceChoice: {
+				method: 'GET',
+				url: '/api/x_wec_product/table/customer_contact/choice/u_data_source'
+			}
+
+		});
+	}
+	
+	
+	ContactEntitlementFactory.$inject = ['$resource'];
+
+	function ContactEntitlementFactory($resource) {
+		return $resource('', {}, {
+			list: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/x_wec_solara_admin_contact_entitlement',
+				transformResponse: listTransformResponse
+			}
+		});
+	}
+
+	
+	ContactSearchFactory.$inject = ['$resource'];
+
+	function ContactSearchFactory($resource) {
+		return $resource('', {}, {
+			search: {
+				method: 'GET', 
+				url: '/api/x_wec_solara_admin/contact_search',
+				transformResponse: listTransformResponse
+			}
+		});
+	}
+
+		
+	PackageFactory.$inject = ['$resource'];
+
+	function PackageFactory($resource) {
+		return $resource('', {}, {
+			list: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/cmdb_software_product_model',
+				transformResponse: listTransformResponse
+			},
+			get: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/cmdb_software_product_model/:sys_id'
+			},
+			create: {
+				method: 'POST',
+				url: '/api/x_wec_solara_admin/package'
+			},
+			childList: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/cmdb_m2m_suite_model',
+			}
+		});
+	}
+
+	
+	PlanFactory.$inject = ['$resource'];
+
+	function PlanFactory($resource) {
+		return $resource('', {}, {
+			list: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/x_wec_solara_admin_plan',
+				transformResponse: listTransformResponse
+			},
+			get: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/x_wec_solara_admin_plan/:sys_id'
+			},
+			create: {
+				method: 'POST',
+				url: '/api/x_wec_solara_admin/plan'
+			},
+		});
+	}
+
+
+	UserFactory.$inject = ['$resource'];
+
+	function UserFactory($resource) {
+		return $resource('', {}, {
+			list: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/sys_user',
+				transformResponse: listTransformResponse
+			},
+			get: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/sys_user/:sys_id'
+			}
+		});
+	}
+
+	
+	BusinessUnitFactory.$inject = ['$resource'];
+	
+	function BusinessUnitFactory($resource) {
+		return $resource('', {}, {
+			list: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/business_unit',
+			}
+		});		
+	}
+
+	
+	DataSourceFactory.$inject = ['$resource'];
+
+	function DataSourceFactory($resource) {
+		return $resource('', {}, {
+			list: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/u_data_source',
+			}
+		});		
+	}
+
+	
+	BizDevTeamFactory.$inject = ['$resource'];
+
+	function BizDevTeamFactory($resource) {
+		return $resource('', {}, {
+			list: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/x_wec_solara_admin_biz_dev_team',
+			},
+			get: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/x_wec_solara_admin_biz_dev_team/:sys_id',
+			},
+			create: {
+				method: 'POST',
+				url: '/api/x_wec_product/table/x_wec_solara_admin_biz_dev_team'
+			},
+			update: {
+				method: 'PATCH', 
+				url: '/api/x_wec_product/table/x_wec_solara_admin_biz_dev_team/:sys_id'
+			}
+		});		
+	}
+	
+	
+	SysUserRoleFactory.$inject = ['$resource'];
+	
+	function SysUserRoleFactory($resource) {
+		return $resource('', {}, {
+			list: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/sys_user_role',
+			}
+		});
+	}
+	
+	
+	SysUserHasRoleFactory.$inject = ['$resource'];
+
+	function SysUserHasRoleFactory($resource) {
+		return $resource('', {}, {
+			list: {
+				method: 'GET', 
+				url: '/api/x_wec_product/table/sys_user_has_role',
+			},
+			create: {
+				method: 'POST', 
+				url: '/api/x_wec_product/table/sys_user_has_role',
+			},
+			delete: {
+				method: 'DELETE', 
+				url: '/api/x_wec_product/table/sys_user_has_role/:sys_id',
+			}
+		});
+	}
+
+	
+	function listTransformResponse(data, headers){
+		var response = {};
+		response.data = angular.fromJson(data);
+		response.headers = headers();
+		return response;
+	}
+ 
+})();
+
+]]></script>
+        <script_name>team.resource-fact</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-27 13:27:06</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>629c93580f76ea006c3005cce1050e20</sys_id>
+        <sys_mod_count>6</sys_mod_count>
+        <sys_name>x_wec_solara_admin.team.resource-fact</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_629c93580f76ea006c3005cce1050e20</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-08 15:43:28</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

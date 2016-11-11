@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.prv-ent-pkg-mdl-ctrl</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .controller('ProvisionEntitlementPackageModalCtrl', ProvisionEntitlementPackageModalCtrl);
+
+    ProvisionEntitlementPackageModalCtrl.$inject = ['$scope', '$uibModalInstance', '$q', 'BusinessUnitFactory', 'DataSourceFactory', 'PackageFactory', 'SearchService', 'data'];
+
+    function ProvisionEntitlementPackageModalCtrl($scope, $uibModalInstance, $q, BusinessUnitFactory, DataSourceFactory, PackageFactory, SearchService, data) {
+		var ctrl = this;
+
+		ctrl.searchPackage = searchPackage;
+		ctrl.searchBizDevTeam = searchBizDevTeam;
+		ctrl.extendPackageByChilds = extendPackageByChilds;
+		ctrl.isShowsSelectableChildDetails = isShowsSelectableChildDetails;
+		ctrl.isShowsBizDevTeams = isShowsBizDevTeams;
+		ctrl.selectChilds = selectChilds;
+		ctrl.unselectChilds = unselectChilds;
+		ctrl.fillSelectableChildDetails = fillSelectableChildDetails;
+		ctrl.clearBizDevTeams = clearBizDevTeams;
+		ctrl.ok = ok;
+		ctrl.cancel = cancel;
+		
+		init();
+
+		function init() {
+			ctrl.fields = {};
+			
+			$q.all([
+				loadBusinessUnits(),
+				loadDataSources(),
+				loadChilds()
+			]).then(function (response) {
+				clear();
+			});
+		}		
+		
+		function clear() {
+			var defaultFields = {
+				childs: [],
+				bizDevTeams: [],
+				businessUnit: getItemFromListByName(ctrl.businessUnits, 'Weather API'),
+				dataSource: getItemFromListByName(ctrl.dataSources, 'Solara'),
+			};				
+			
+			angular.extend(ctrl.fields, defaultFields);
+		}
+
+		function ok() {
+			submit().then(
+				function (response) {
+					$uibModalInstance.close(response);
+				},
+				function (response) {
+					$uibModalInstance.dismiss(response);
+				}
+			);			
+		}
+
+		function cancel() {
+			$uibModalInstance.dismiss('cancel');
+		}
+				
+		function selectChilds(childs) {
+			ctrl.fields.childs = ctrl.fields.childs.concat(childs);
+			ctrl.selectableChilds = ctrl.selectableChilds.filter(function (child) {
+				return !childs.some(function (value) { return child.sys_id === value.sys_id; });
+			});
+		}
+		
+		function unselectChilds(childs) {
+			ctrl.selectableChilds = ctrl.selectableChilds.concat(childs);
+			ctrl.fields.childs = ctrl.fields.childs.filter(function (child) {
+				return !childs.some(function (value) { return child.sys_id === value.sys_id; });
+			});
+		}
+		
+		function extendPackageByChilds(packageSysId) {
+			loadPackageChilds(packageSysId).then(function (response) {
+				var packageChilds = response.result.map(function (value) {
+					return {
+						sys_id: value.suite_child.value,
+						name: value.suite_child.display_value
+					};
+				});
+				
+				unselectChilds(ctrl.fields.childs);
+				selectChilds(packageChilds);
+			});
+		}
+		
+		function fillSelectableChildDetails() {
+			if (!ctrl.selectableChildsModel || ctrl.selectableChildsModel.length !== 1) {
+				ctrl.selectableChildDetails = undefined;
+				return;
+			}
+			
+			var child = ctrl.selectableChildsModel[0];
+			
+			ctrl.selectableChildDetails = {
+				shortDescription: {
+					value: child.shortDescription,
+					isShows: !!child.shortDescription
+				},
+				apiSpec: {
+					value: child.apiSpec,
+					isShows: /^http[s]?:\/\//.test(child.apiSpec)
+				},
+				supportedBy: {
+					value: child.supportedBy,
+					isShows: !!child.supportedBy
+				}
+			};
+		}
+		
+		function clearBizDevTeams() {
+			ctrl.fields.bizDevTeams = [];
+		}
+
+		function loadPackageChilds(packageSysId) {
+			var params = {
+				suite_parent: packageSysId,
+				sysparm_display_value: 'all'
+			};
+			
+			return PackageFactory.childList(params).$promise;						
+		}
+
+		function loadChilds() {
+			var params = {
+				u_application_type: 'API',
+				sysparm_display_value: 'all'
+			};
+			
+			return PackageFactory.list(params).$promise.then(function (response) {
+				ctrl.selectableChilds = response.data.result.map(function (value) {
+					return {
+						sys_id: value.sys_id.value,
+						name: value.display_name.display_value,
+						shortDescription: value.short_description.display_value,
+						apiSpec: value.u_api_specification.display_value,
+						supportedBy: value.u_fulfillment_group.display_value
+					};
+				});		
+				
+				return response;
+			});						
+		}
+		
+		function loadBusinessUnits() {
+			return BusinessUnitFactory.list().$promise.then(function (response) {
+				ctrl.businessUnits = response.result.map(function (value) {
+					return {
+						sys_id: value.sys_id,
+						name: value.name
+					};
+				});				
+				return response;
+			});			
+		}
+
+		function loadDataSources() {
+			return DataSourceFactory.list().$promise.then(function (response) {
+				ctrl.dataSources = response.result.map(function (value) {
+					return {
+						sys_id: value.sys_id,
+						name: value.u_name
+					};
+				});
+				return response;
+			});			
+		}
+		
+		function loadPackage(sysId) {
+			var params = {
+				sys_id: sysId
+			};
+			
+			return PackageFactory.get(params).$promise;
+		} 
+
+		
+		function searchPackage(name) {
+			return SearchService.searchPackage(name).then(function (response) {
+				return response.data.result;
+			});			
+		}
+		
+		function searchBizDevTeam(name) {
+            return SearchService.searchBizDevTeam(name).then(function(response) {
+                ctrl.bizDevTeams = response.result;
+            });
+		}
+		
+		function submit() {			
+			var params = {
+				name: ctrl.fields.name,
+				solara_package_id: ctrl.fields.solaraPackageId,
+				short_description: ctrl.fields.shortDescription,
+				u_business_unit: (!!ctrl.fields.businessUnit) ? ctrl.fields.businessUnit.sys_id : undefined,
+				u_data_source: (!!ctrl.fields.dataSource) ? ctrl.fields.dataSource.sys_id : undefined,
+				biz_dev_teams: ctrl.fields.bizDevTeams.map(function (value) { 
+					return value.sys_id;
+				}),
+				childs: ctrl.fields.childs.map(function (value) { 
+					return value.sys_id;
+				})
+			}; 
+	
+			return PackageFactory.create(params).$promise.then(function (response) {
+				return loadPackage(response.result.sys_id);
+			}).then(function (response) {
+				return response.result;
+			});
+		}
+		
+		function isShowsSelectableChildDetails() {
+			if (!ctrl.selectableChildDetails) {
+				return false;
+			}
+			
+			return Object.keys(ctrl.selectableChildDetails).filter(function (key) {
+				return ctrl.selectableChildDetails.hasOwnProperty(key) && ctrl.selectableChildDetails[key].isShows;
+			}).length > 0;
+		}
+		
+		function isShowsBizDevTeams() {
+			return ctrl.fields.businessDevelopment;
+		}
+		
+		function getItemFromListByName(list, name) {
+			if (!list || !list.length) {
+				return null;
+			}
+			
+			var filtredList = list.filter(function (item) {
+				return item.name === name;
+			});
+			
+			return !!filtredList.length ? filtredList[0] : null;
+		}
+
+    }
+})();
+
+]]></script>
+        <script_name>prv-ent-pkg-mdl-ctrl</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-11 15:02:27</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>2f88d91f0f9aa20034457d4ce1050e4f</sys_id>
+        <sys_mod_count>54</sys_mod_count>
+        <sys_name>x_wec_solara_admin.prv-ent-pkg-mdl-ctrl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_2f88d91f0f9aa20034457d4ce1050e4f</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-10 09:10:41</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

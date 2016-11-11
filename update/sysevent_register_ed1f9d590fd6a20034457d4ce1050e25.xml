@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysevent_register">
+    <sysevent_register action="INSERT_OR_UPDATE">
+        <description>Event appears when creates an API key (new record in service_entitlement table)</description>
+        <event_name>x_wec_solara_admin.key.created</event_name>
+        <fired_by>Scripted REST: 'Entitlement API' method 'Create entitlement'</fired_by>
+        <queue/>
+        <suffix>key.created</suffix>
+        <sys_class_name>sysevent_register</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-05 10:21:50</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>ed1f9d590fd6a20034457d4ce1050e25</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>x_wec_solara_admin.key.created</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sysevent_register_ed1f9d590fd6a20034457d4ce1050e25</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-05 10:40:38</sys_updated_on>
+        <table/>
+    </sysevent_register>
+</record_update>

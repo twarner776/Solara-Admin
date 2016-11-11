@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>true</direct>
+        <endpoint>x_wec_solara_admin_bizdev-account-authentication-cust-cont-tpl.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+	
+<h1 class="page-header twc-header">BizDev Account Authentication Form</h1>	
+
+<p>Search for and select a list of NOT REGISTERED bizdev team members to start portal account authentication</p>	
+	
+<div class="row" style="padding-top: 5px;">
+	<div class="col-sm-12">
+	
+		<div class="panel panel-default">
+			<div class="panel-heading twc-panel-heading">Filter</div>
+
+			<form class="form-horizontal twc-form" novalidate="true" autocomplete="off">
+
+				<div class="panel-body">
+
+					<div class="row">
+
+						<div class="col-sm-6">
+							<div class="form-group form-group-sm">
+								<label class="col-sm-4 control-label">Business Unit</label>
+								<div class="col-sm-8">
+								 
+									<input type="text" class="form-control" value="BD" ng-init="ac.filter.businessUnits = [{label: 'BD'}]" readonly="true"/>
+									
+								  <!--
+								  <ui-select multiple="true" ng-model="ac.filter.businessUnits" theme="bootstrap" close-on-select="false">
+									  <ui-select-match placeholder="Type to add a new business units...">{{$item.label}}</ui-select-match>
+									  <ui-select-choices repeat="bu in ac.businessUnits"
+														 refresh="ac.searchBusinessUnit($select.search)"
+														 refresh-delay="30">
+										  <div ng-bind-html="bu.label | highlight: $select.search"></div>
+									  </ui-select-choices>
+
+								  </ui-select>				  
+								-->	
+									
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								<label class="col-sm-4 control-label">Products</label>
+								<div class="col-sm-8">
+								  
+								  <ui-select multiple="true" ng-model="ac.filter.products" theme="bootstrap" close-on-select="false">
+									  <ui-select-match placeholder="Type to add a new products...">{{$item.display_name}}</ui-select-match>
+									  <ui-select-choices repeat="p in ac.products"
+														 refresh="ac.searchProduct($select.search)"
+														 refresh-delay="30">
+										  <div ng-bind-html="p.display_name | highlight: $select.search"></div>
+									  </ui-select-choices>
+
+								  </ui-select>				  
+									
+									
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								<label class="col-sm-4 control-label">Accounts</label>
+								<div class="col-sm-8">
+								  
+								  <ui-select multiple="true" ng-model="ac.filter.customerAccounts" theme="bootstrap" close-on-select="false">
+									  <ui-select-match placeholder="Type to add a new accounts...">{{$item.name}}</ui-select-match>
+									  <ui-select-choices repeat="account in ac.customerAccounts"
+														 refresh="ac.searchCustomerAccount($select.search)"
+														 refresh-delay="30">
+										  <div ng-bind-html="account.name | highlight: $select.search"></div>
+									  </ui-select-choices>
+
+								  </ui-select>				  
+									
+									
+								</div>
+							</div>
+
+						</div>
+
+						<div class="col-sm-6">
+
+							<div class="form-group form-group-sm">
+								<label class="col-sm-4 control-label">Name</label>
+								<div class="col-sm-8">
+								  <input type="text" class="form-control" ng-model="ac.filter.name" />
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								<label class="col-sm-4 control-label">Email</label>
+								<div class="col-sm-8">
+								  <input type="text" class="form-control" ng-model="ac.filter.email" />
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								<label class="col-sm-4 control-label">Registered</label>
+								<div class="col-sm-8">
+									<select class="form-control" ng-init="ac.filter.u_registration = ac.uRegistration[0].value"
+											ng-model="ac.filter.u_registration"
+											ng-options="reg.value as reg.value for reg in ac.uRegistration" ng-disabled="true"
+									></select>
+								</div>
+							</div>
+
+
+						</div>
+
+					</div>
+					<div class="row">
+
+						<div class="col-sm-12">
+
+						  <div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+							  <button type="submit" 
+									  ng-click="ac.search()"
+									  class="btn btn-sm btn-primary">Search</button>
+								
+							<button type="button" 
+								  class="btn btn-default btn-sm pull-right" ng-click="ac.clear()">Clear</button>
+								
+
+							</div>
+						  </div>				
+						</div>
+
+					</div>
+				</div>
+
+			</form>
+
+		</div>		
+	
+	</div>
+</div>
+	
+	<div class="row">
+		<div class="col-sm-12">
+			<table ng-table="ac.table" class="table table-striped twc-table" ng-show="ac.table.data.length > 0">
+				<tr ng-repeat="row in $data track by $index">
+					<td header="'headerCheckbox.html'" ng-if="ac.showCheckBox">
+						<input type="checkbox" ng-model="ac.checkboxes.items[row[ac.prefix + 'sys_id'].value]"/>
+					</td>
+					<td data-title="'Name'" sortable="'name'">{{row[ac.prefix + 'name'].display_value}}</td>
+					<td data-title="'Account'" sortable="'account'">{{row[ac.prefix + 'account'].display_value}}</td>
+					<td data-title="'Email'" sortable="'email'">{{row[ac.prefix + 'email'].display_value}}</td>
+					<td data-title="'Business unit'" sortable="'u_business_unit'">{{row[ac.prefix + 'u_business_unit'].display_value}}</td>
+					<td data-title="'Registration started'" sortable="'u_registration_started'">{{row[ac.prefix + 'u_registration_started'].display_value}}</td>
+					<td data-title="'Registration completed'" sortable="'u_registration_completed'">{{row[ac.prefix + 'u_registration_completed'].display_value}}</td>
+				</tr>
+			</table>
+			
+			<div class="alert alert-info" ng-show="!ac.table">Use filters above to search for "Not Registered" contacts</div>
+			<div class="alert alert-warning" role="alert" ng-show="ac.table.data.length == 0">No records found.</div>
+
+		</div>
+	</div>	
+	<div class="row">
+		<div class="col-sm-12">
+			<button type="submit" ng-show="ac.checkboxes.getCheckedItems().length > 0" 
+					ng-disabled="ac.filter.u_registration !== 'Not Registered'"
+					ng-click="ac.activate()"
+					class="btn btn-sm btn-primary">Activate contacts</button>
+
+		</div>
+	</div>	
+	
+</j:jelly>]]></html>
+        <name>bizdev-account-authentication-cust-cont-tpl</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>anton.sychikov.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-28 10:09:54</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>af19bb680fb22e006c3005cce1050e7b</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>bizdev-account-authentication-cust-cont-tpl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_page_af19bb680fb22e006c3005cce1050e7b</sys_update_name>
+        <sys_updated_by>anton.sychikov.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-28 10:42:19</sys_updated_on>
+    </sys_ui_page>
+</record_update>

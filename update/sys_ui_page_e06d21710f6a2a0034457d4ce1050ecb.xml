@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>true</direct>
+        <endpoint>x_wec_solara_admin_biz-prv-ent-pkg-mdl-tpl.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	
+	<form name="ctrl.packageForm" class="form-horizontal modal-form" novalidate="novalidate">
+		<div class="modal-header">
+			<h3 class="modal-title">Package</h3>
+		</div>
+
+		<div class="modal-body">
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label control-label-required">Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="name" name="name" required="required" readonly="readonly"
+						   ng-model="ctrl.fields.name" />
+					
+					<div ng-messages="ctrl.packageForm.name.$error" ng-if="!ctrl.packageForm.name.$pristine">
+						<div ng-message="required" class="error-message">required field</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="solaraPackageId" class="col-sm-3 control-label control-label-required">Solara Package ID</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="solaraPackageId" name="solaraPackageId" required="required" readonly="readonly"
+						   ng-model="ctrl.fields.solaraPackageId"/>
+					
+					<div ng-messages="ctrl.packageForm.solaraPackageId.$error" ng-if="!ctrl.packageForm.solaraPackageId.$pristine">
+						<div ng-message="required" class="error-message">required field</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="shortDescription" class="col-sm-3 control-label">Short Description</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="shortDescription" name="shortDescription" readonly="readonly"
+						   ng-model="ctrl.fields.shortDescription"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="businessUnit" class="col-sm-3 control-label">Business Unit</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="businessUnit" name="businessUnit" readonly="readonly"
+						   ng-model="ctrl.fields.businessUnit.name"/>
+<!--
+					<select class="form-control" id="businessUnit"
+							ng-model="ctrl.fields.businessUnit"
+							ng-options="item as item.label for item in ctrl.businessUnits">
+					</select>
+-->
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="dataSource" class="col-sm-3 control-label">Data Source</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="dataSource" name="dataSource" readonly="readonly"
+						   ng-model="ctrl.fields.dataSource.name"/>
+<!--					
+					<select class="form-control" id="dataSource"
+							ng-model="ctrl.fields.dataSource"
+							ng-options="item as item.label for item in ctrl.dataSources">
+					</select>
+-->
+				</div>
+			</div>
+			
+			<hr />
+			
+			<div class="extendable-package-container">
+				<label for="extendablePackage" class="control-label search-control-label">
+					Childs
+				</label>
+				
+				<select class="form-control" name="packageChilds" multiple="multiple" readonly="readonly"
+						ng-model="ctrl.fields.selectedChilds"
+						ng-options="item as item.name for item in ctrl.fields.childs"
+						ng-change="ctrl.fillChildDetails(ctrl.fields.selectedChilds)">
+				</select>				
+			</div>
+			
+			<div class="child-details-container" ng-if="ctrl.isShowsChildDetails()">
+				<div ng-if="ctrl.childDetails.shortDescription.isShows">
+					<span class="child-details-label">Short Description:</span>
+					<span ng-bind="ctrl.childDetails.shortDescription.value" />
+				</div>
+				<div ng-if="ctrl.childDetails.apiSpec.isShows">
+					<span class="child-details-label">API Specification:</span>
+					<a class="link" target="_blank"
+					   ng-href="{{ ctrl.childDetails.apiSpec.value }}" 
+					   ng-bind="ctrl.childDetails.apiSpec.value" />
+				</div>
+				<div ng-if="ctrl.childDetails.supportedBy.isShows">
+					<span class="child-details-label">Supported by:</span>
+					<span ng-bind="ctrl.childDetails.supportedBy.value" />
+				</div>
+			</div>
+
+		</div>
+
+		
+		<div class="modal-footer">			
+			<button class="btn btn-primary btn-sm" type="button"
+					ng-click="ctrl.cancel()">Ok</button>
+		</div>
+	</form>
+
+</j:jelly>]]></html>
+        <name>biz-prv-ent-pkg-mdl-tpl</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-19 10:56:08</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>e06d21710f6a2a0034457d4ce1050ecb</sys_id>
+        <sys_mod_count>18</sys_mod_count>
+        <sys_name>biz-prv-ent-pkg-mdl-tpl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_page_e06d21710f6a2a0034457d4ce1050ecb</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-26 09:24:12</sys_updated_on>
+    </sys_ui_page>
+</record_update>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.tpd-drctv</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .directive('tpd', TpdDirective);
+
+	function TpdDirective() {
+		return {
+			restrict: 'E',
+			template: template,
+			require: 'ngModel',
+			controller: TpdController,
+			scope: {
+				ngModel: '='
+			}
+		};
+	}
+ 
+	function template() {
+		return '<div class="tpd-control">' +
+					'<span>Limit</span>' +
+					'<input class="form-control" type="number" ng-model="count" />' +
+					'<span>Per</span>' +
+			
+					'<select class="form-control" ng-model="measure" ng-options="item as item.value for item in ::measures"></select>' +
+				'</div>';
+	}
+	
+	TpdController.$inject = ['$scope'];
+	
+	function TpdController($scope) {
+		$scope.measures = {
+			SECOND: {value: 'Second'},
+			MINUTE: {value: 'Minute'},
+			HOUR: {value: 'Hour'},
+			DAY: {value: 'Day'},
+			MONTH: {value: 'Month'},
+			YEAR: {value: 'Year'}
+		};
+		
+		$scope.measure = $scope.measures.DAY;
+		
+		$scope.$watchGroup(['count', 'measure'], function (values) {
+			if (!!$scope.count && !!$scope.measure) {
+				$scope.ngModel = 'Limit ' + $scope.count + ' Per ' + $scope.measure.value;
+			} else {
+				$scope.ngModel = undefined;
+			}
+		});
+	}
+
+})();
+
+]]></script>
+        <script_name>tpd-drctv</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-17 09:52:57</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>08cb8f090f22e60034457d4ce1050efb</sys_id>
+        <sys_mod_count>14</sys_mod_count>
+        <sys_name>x_wec_solara_admin.tpd-drctv</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_08cb8f090f22e60034457d4ce1050efb</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-17 11:26:05</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

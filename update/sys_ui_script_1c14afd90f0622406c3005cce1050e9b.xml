@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.mng-acc-cntct-ctrl</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+        .controller('ManageAccountContactCtrl', ManageAccountContactCtrl);
+
+    ManageAccountContactCtrl.$inject = ['$scope', 'NgTableParams', 'ContactSearchFactory', 'SearchService', 'ManageAccountModalService', '$filter'];
+
+    function ManageAccountContactCtrl($scope, NgTableParams, ContactSearchFactory, SearchService, ModalService, $filter) {
+		
+		var ctrl = this; 
+		
+		ctrl.createContact = ModalService.createContact;
+		ctrl.editContact = ModalService.editContact;
+		ctrl.searchBusinessUnit = searchBusinessUnit;
+		ctrl.searchAccount = searchAccount;
+		ctrl.searchProduct = searchProduct;
+		ctrl.search = search;
+		ctrl.clear = clear;
+		
+		init();
+		
+		
+		function init() {			
+			ctrl.clear();
+		}
+	
+		function searchBusinessUnit (name) {
+            return SearchService.searchBusinessUnit(name).then(function(response) {
+                ctrl.businessUnits = response.result;
+            });
+		}
+		
+		function searchAccount (name) {
+			return SearchService.searchAccount(name).then(function (response) {
+				ctrl.accounts = response.data.result;
+			});			
+		}
+
+		function searchProduct (name) {
+			return SearchService.searchProduct(name).then(function (response) {
+				ctrl.products = response.result;
+			});			
+		}
+
+		function clear() {
+			ctrl.filter = {};
+		}
+		
+		function search() {
+			if(!ctrl.table){
+				ctrl.table = initTable();				
+			} else {
+				ctrl.table.reload();
+			}
+		}
+/*		
+		function initTable() {
+			return new NgTableParams({
+				count: 25,
+				sorting: { c_name: "asc" }, 
+			}, {
+				counts: [25, 50, 100, 200],
+				getData: function(params) {
+					ctrl.loader = true;
+					
+					var filters = params.filter(),
+						filtersArr = [];
+
+					if(!!ctrl.filter.businessUnits && ctrl.filter.businessUnits.length > 0){						
+						filtersArr.push(ctrl.filter.businessUnits.map(function(item){return 'c_u_business_unit=' + item.label;}).join('^OR'));
+					}
+
+					if(!!ctrl.filter.products && ctrl.filter.products.length > 0) {						
+						filtersArr.push(ctrl.filter.products.map(function(item){return 's_product=' + item.sys_id;}).join('^OR'));
+					}
+					
+					if(!!ctrl.filter.accounts && ctrl.filter.accounts.length > 0){						
+						filtersArr.push(ctrl.filter.accounts.map(function(item){return 'c_account=' + item.sys_id;}).join('^OR'));
+					}
+		
+					if(!!ctrl.filter.name){
+						filtersArr.push('c_nameLIKE'+ ctrl.filter.name);
+					}
+					
+					if(!!ctrl.filter.email){
+						filtersArr.push('c_emailLIKE' + ctrl.filter.email);
+					}					
+
+					var sorting = Object.keys(params.sorting());
+					if(sorting.length > 0){
+						filtersArr.push('ORDERBY' + (params.sorting()[sorting[0]] === 'desc' ? 'DESC' : '') + sorting[0]);
+					}
+
+					return loadData();
+					
+					function loadData() {
+						return ContactEntitlementFactory.list({
+							sysparm_limit: params.count(),
+							sysparm_offset: (params.page() - 1) * params.count(),
+							sysparm_query: filtersArr.join('^'),
+							sysparm_display_value: 'all',
+							sysparm_suppress_pagination_header: true
+						}).$promise.then(function(res) {
+							ctrl.loader = false;
+							params.total(res.headers['x-total-count']);
+							
+							// return res.data.result;
+
+							
+							var result = res.data.result;
+							
+							var distinct = {};
+							result.forEach(function (value) {
+								distinct[value.c_sys_id.value] = value;
+							});
+							
+							return Object.keys(distinct).map(function (key) {
+								return distinct[key];
+							});							
+						});
+						
+					}
+				}
+			});
+			
+		}	
+*/		
+		function initTable() {
+			return new NgTableParams({
+				count: 25,
+				sorting: { name: "asc" }, 
+			}, {
+				counts: [25, 50, 100, 200],
+				getData: function(params) {
+					ctrl.loader = true;
+					
+					var filters = params.filter(),
+						filterArrs = {};
+
+					if (!!ctrl.filter.businessUnits && ctrl.filter.businessUnits.length > 0) {
+						filterArrs.u_business_unit = ctrl.filter.businessUnits.map(function (item) { return item.value; });
+					}
+
+					if (!!ctrl.filter.products && ctrl.filter.products.length > 0) {						
+						filterArrs.product = ctrl.filter.products.map(function (item) { return item.sys_id; });
+					}
+					
+					if (!!ctrl.filter.accounts && ctrl.filter.accounts.length > 0) {
+						filterArrs.account = ctrl.filter.accounts.map(function (item) {return item.sys_id; });
+					}
+		
+					if (!!ctrl.filter.name) {
+						filterArrs.name = ctrl.filter.name;
+					}
+					
+					if (!!ctrl.filter.email) {
+						filterArrs.email = ctrl.filter.email;
+					}					
+
+					var sorting = Object.keys(params.sorting());
+					if(sorting.length > 0) {
+						var fieldName = sorting[0];
+						filterArrs['orderby' + params.sorting()[fieldName]] = fieldName;
+					}
+
+					filterArrs.limit = params.count();
+					filterArrs.offset = (params.page() - 1) * params.count();
+					
+					return loadData();
+					
+					function loadData() {
+						return ContactSearchFactory.search(
+							filterArrs
+						).$promise.then(function(res) {
+							ctrl.loader = false;
+							params.total(res.headers['x-total-count']);
+							
+							return res.data.result;
+						});
+						
+					}
+				}
+			});
+			
+		}	
+
+		
+		function correctPhoneFields(items, fieldNames) {
+			return items.map(function (item) {
+				fieldNames.forEach(function (fieldName) {
+					if (!item.hasOwnProperty(fieldName)) {
+						return;
+					}
+					
+					item[fieldName].display_value = correctPhone(item[fieldName].display_value);
+				});
+			});
+			
+			// if the phone number hasn't a country code to set US code 
+			function correctPhone(value) {
+				if (!!value) {
+					return value;
+				}
+				
+				var phone = value.replace(/[^\d\+]/g, '');
+				phone = (phone.length == 10) ? '+1' + phone : phone;
+				return $filter('ngIntlTelInput')(phone);
+			}
+		}
+
+				
+    }
+})();
+
+]]></script>
+        <script_name>mng-acc-cntct-ctrl</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-09-23 09:46:50</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>1c14afd90f0622406c3005cce1050e9b</sys_id>
+        <sys_mod_count>32</sys_mod_count>
+        <sys_name>x_wec_solara_admin.mng-acc-cntct-ctrl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_1c14afd90f0622406c3005cce1050e9b</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-10 11:35:02</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

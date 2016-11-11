@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>true</direct>
+        <endpoint>x_wec_solara_admin_bizdev-account-authentication-active-modal-tpl.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	<div class="modal-header">
+		<h3 class="modal-title">Please Note</h3>
+	</div>
+	<div class="modal-body">
+		
+		<p>You are about to activate portal account(s) with option to cancel activation or move forward with activation.</p>
+	</div>
+	
+	<div class="modal-footer">
+		<button class="btn btn-default btn-sm" type="button" ng-click="m.cancel()">Close</button>
+		<button class="btn btn-primary btn-sm" type="button" ng-click="m.ok()">Activate</button>
+	</div>
+	
+</j:jelly>]]></html>
+        <name>bizdev-account-authentication-active-modal-tpl</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>anton.sychikov.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-28 10:08:07</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>18a837680fb22e006c3005cce1050eec</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>bizdev-account-authentication-active-modal-tpl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_page_18a837680fb22e006c3005cce1050eec</sys_update_name>
+        <sys_updated_by>anton.sychikov.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-10-28 10:08:07</sys_updated_on>
+    </sys_ui_page>
+</record_update>

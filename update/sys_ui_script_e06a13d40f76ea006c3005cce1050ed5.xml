@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_wec_solara_admin.team.team-list-ctrl</name>
+        <script><![CDATA[(function () {
+    'use strict';
+
+    angular
+        .module('twc-product')
+		.controller('TeamListCtrl', TeamListCtrl);
+	
+	TeamListCtrl.$inject = ['$scope', 'BizDevTeamFactory', '$state'];
+	
+	function TeamListCtrl ($scope, BizDevTeamFactory, $state) {
+		var ctrl = this;
+	
+		ctrl.openTeamInfo = openTeamInfo;
+		ctrl.isTeamOpened = isTeamOpened;
+		
+		loadTeams();
+		
+		$scope.$on('team.update-list', function () {
+			loadTeams();
+		});
+		
+		
+		function loadTeams() {
+			var params = {
+				sysparm_display_value: 'all'
+			};
+			
+			return BizDevTeamFactory.list(params).$promise.then(function (response) {
+				ctrl.teams = response.result;
+				
+				return response;
+			});
+		}
+		
+		function openTeamInfo(teamSysId) {
+			$state.go('team-list.team-info', {sysId: teamSysId});
+		}
+		
+		function isTeamOpened(teamSysId) {
+			return $state.is('team-list.team-info', {sysId: teamSysId}) || $state.is('team-list.roles', {sysId: teamSysId});
+		}
+	}
+	
+})();
+
+]]></script>
+        <script_name>team.team-list-ctrl</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-27 13:19:05</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>e06a13d40f76ea006c3005cce1050ed5</sys_id>
+        <sys_mod_count>9</sys_mod_count>
+        <sys_name>x_wec_solara_admin.team.team-list-ctrl</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ui_script_e06a13d40f76ea006c3005cce1050ed5</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-09 10:58:23</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

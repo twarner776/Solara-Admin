@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ws_operation">
+    <sys_ws_operation action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl/>
+        <http_method>GET</http_method>
+        <name>Get Entitlements belongs to current user</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {	
+	var queryParams = request.queryParams;
+	
+	var record = executeQuery(queryParams);
+			
+	var headers = {};
+	headers['X-Total-Count'] = '' + record.getRowCount();
+	response.setHeaders(headers);
+		
+	var result = [];
+	
+	if (record.size <= queryParams.sysparm_offset) {
+		return result; 
+	}
+
+	// can not use the setLocation method to set offset not in global application 
+	for (i = 0; i < queryParams.sysparm_offset && record.hasNext(); i++) {
+		record.next();
+	}
+
+	for (i = 0; record.next(); i++) {
+		if (!!queryParams.sysparm_limit && i >= queryParams.sysparm_limit) {
+			break;
+		}
+		
+		result.push(recordToResultItem(record));		
+	}
+			
+	return result;
+	
+	
+	
+	function executeQuery(params) {
+		var record = new GlideRecord('service_entitlement');
+
+		var twcPointOfContacts = !!params.twc_point_of_contacts ? JSON.parse(params.twc_point_of_contacts[0]) : [];
+		if (!!twcPointOfContacts.length) {
+			var entitledUserSysIds = getContactSysIds(twcPointOfContacts);
+			
+			if (entitledUserSysIds.length === 1) {
+				record.addQuery('u_entitled_user', entitledUserSysIds[0]);				
+			} else {
+				record.addQuery('u_entitled_user', 'IN', entitledUserSysIds);				
+			}
+		}
+				
+		var ownTeamSysIds = getTeamSysIds(gs.getUserID());
+		var ownPackageSysIds = getPackageSysIds(ownTeamSysIds);
+		
+		if (ownPackageSysIds.length === 1) {
+			record.addQuery('product', ownPackageSysIds[0]);
+		} else {
+			record.addQuery('product', 'IN', ownPackageSysIds);
+		}
+		
+		
+		if (!!params.sysparm_query) {
+			record.addEncodedQuery(params.sysparm_query);	
+		}
+
+		record.query();
+		
+		return record;
+	}
+	
+	function getTeamSysIds(userSysId) {		
+		var record = new GlideRecord('x_wec_solara_admin_biz_dev_team');
+		record.addQuery('u_team_members', 'CONTAINS', userSysId);
+		
+		record.query();
+		
+		var result = [];
+		
+		while (record.next()) {
+			result.push(record.getValue('sys_id'));
+		}
+		
+		return result;
+	}
+	
+	function getPackageSysIds(teamSysIds) {
+		var record = new GlideRecord('cmdb_software_product_model');
+
+		var result = [];
+		
+		if (!teamSysIds.length) {
+			return result;
+		}
+
+		if (teamSysIds.length === 1) {
+			record.addQuery('u_team_name', teamSysIds[0]);
+		} else {
+			record.addQuery('u_team_name', 'IN', teamSysIds);
+		}
+		
+		record.query();
+		
+		while (record.next()) {
+			result.push(record.getValue('sys_id'));
+		}
+		
+		return result;
+	}
+	
+	function getContactSysIds(twcPointOfContactSysIds) {
+		var record = new GlideRecord('customer_contact');
+		
+		if (twcPointOfContactSysIds.length === 1) {
+			record.addQuery('u_twc_point_of_contact', twcPointOfContactSysIds[0]);
+		} else {
+			record.addQuery('u_twc_point_of_contact', 'IN', twcPointOfContactSysIds);
+		}
+		
+		record.query();
+
+		var result = [];
+		
+		while (record.next()) {
+			result.push(record.getValue('sys_id'));
+		}
+		
+		return result;		
+	}
+
+	function recordToResultItem(record) {
+		var entitledUserRef = record.u_entitled_user.getRefRecord();
+		
+		return {
+			sys_id: {
+				value: record.getValue('sys_id'),
+			},
+
+			u_number: {
+				value: record.getValue('u_number'),
+				display_value: record.u_number.getDisplayValue()
+			},
+
+			product: {
+				value: record.getValue('product'),
+				display_value: record.product.getDisplayValue()
+			},
+
+			account: {
+				value: record.getValue('account'),
+				display_value: record.account.getDisplayValue()
+			},
+			
+			is_child_account: !!record.account.getRefRecord().getValue('account_parent'),
+
+			u_entitled_user: {
+				value: record.getValue('u_entitled_user'),
+				display_value: record.u_entitled_user.getDisplayValue()
+			},
+
+			u_twc_point_of_contact: {
+				value: entitledUserRef.getValue('u_twc_point_of_contact'),
+				display_value: (!!entitledUserRef.u_twc_point_of_contact) ? entitledUserRef.u_twc_point_of_contact.getDisplayValue() : undefined
+			},
+
+			u_solara_api_key: {
+				value: record.getValue('u_solara_api_key'),
+				display_value: record.u_solara_api_key.getDisplayValue()
+			},
+
+			end_date: {
+				value: record.getValue('end_date'),
+				display_value: record.end_date.getDisplayValue()
+			},
+
+			u_business_unit: {
+				value: record.getValue('u_business_unit'),
+				display_value: record.u_business_unit.getDisplayValue()
+			},
+			
+			u_entitlement_status: {
+				value: record.getValue('u_entitlement_status'),
+				display_value: record.u_entitlement_status.getDisplayValue()
+			}
+		};
+	} 
+		
+})(request, response);
+]]></operation_script>
+        <operation_uri>/api/x_wec_solara_admin/bizdev/current_user/entitlement</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/current_user/entitlement</relative_path>
+        <request_example/>
+        <requires_acl_authorization>false</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>oleg.voropayev.contractor@weather.com</sys_created_by>
+        <sys_created_on>2016-10-25 10:39:08</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>fcd2e47b0fe26a006c3005cce1050ec0</sys_id>
+        <sys_mod_count>60</sys_mod_count>
+        <sys_name>Get Entitlements belongs to current user</sys_name>
+        <sys_package display_value="Solara Admin Console" source="x_wec_solara_admin">5ef3dfa60fbdea006c3005cce1050ec2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Solara Admin Console">5ef3dfa60fbdea006c3005cce1050ec2</sys_scope>
+        <sys_update_name>sys_ws_operation_fcd2e47b0fe26a006c3005cce1050ec0</sys_update_name>
+        <sys_updated_by>oleg.voropayev.contractor@weather.com</sys_updated_by>
+        <sys_updated_on>2016-11-09 15:25:07</sys_updated_on>
+        <web_service_definition display_value="Biz Dev API">2e4f2fd30f622e0034457d4ce1050e37</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+</record_update>
